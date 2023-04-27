@@ -12,7 +12,7 @@ __global__ void addKernel(int *c, const int *a, const int *b)
     c[i] = a[i] + b[i];
 }
 
-int main()
+int oldMain()
 {
     const int arraySize = 5;
     const int a[arraySize] = { 1, 2, 3, 4, 5 };
@@ -47,7 +47,6 @@ cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size)
     int *dev_b = 0;
     int *dev_c = 0;
     cudaError_t cudaStatus;
-
     // Choose which GPU to run on, change this on a multi-GPU system.
     cudaStatus = cudaSetDevice(0);
     if (cudaStatus != cudaSuccess) {
