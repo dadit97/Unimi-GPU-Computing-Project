@@ -18,7 +18,7 @@ int adj_matrix[10][10] = {
     {4 ,-1 ,-1 ,5 ,-1 ,-1 ,0 ,-1 ,2 ,1},
     {2 ,2 ,-1 ,-1 ,-1 ,-1 ,-1 ,0 ,5 ,5},
     {3 ,-1 ,-1 ,-1 ,5 ,-1 ,2 ,5 ,0 ,-1},
-    {1 ,3 ,-1 ,1 ,4 ,-1 ,2 ,4 ,1 ,0}
+    {-1 ,5 ,4 ,3 ,2 ,5 ,1 ,5 ,-1 ,0}
 };
 
 __global__ void printThreadMatrixRow(int* matrix, int dimension) {
@@ -57,29 +57,27 @@ __global__ void shortestPath(int* matrix, int dimension) {
     // Getting direct connections with source node maintaining the column fixed
     // and jumping from row to row
     for (int i = 0; i < dimension; i++) {
-        if (Vt[i] == true) continue;
-        else {
-            l[i] = matrix[sourceNodeIndex + dimension * i];
-        }
+        l[i] = matrix[sourceNodeIndex + dimension * i];
     }
 
+    int closestWeigth = 50;
+    int closestIndex = sourceNodeIndex;
     // while V != Vt
     while (!areAllTrue(Vt, dimension)) {
+
         // Find the next vertex closest to source node
-        int closestWeigth = MAXWEIGHT;
-        int closestIndex = sourceNodeIndex;
         for (int i = 0; i < dimension; i++) {
             if (Vt[i] == true) continue;
             if (l[i] != -1 && l[i] < closestWeigth) {
                 closestWeigth = l[i];
                 closestIndex = i;
+                if (tID == 0) printf("Thread %d, closestIndex:%d,  closestWeigth:%d\n", tID, closestIndex, closestWeigth);
             }
         }
-        //printf("Thread %d, closest index: %d, closest weight: %d \n", tID, closestIndex, closestWeigth);
 
         // Add closest vertex to Vt
         Vt[closestIndex] = true;
-
+        
         // Recompute l
         for (int i = 0; i < dimension; i++) {
             if (Vt[i] == true) continue;
@@ -89,10 +87,12 @@ __global__ void shortestPath(int* matrix, int dimension) {
             }
         }
     }
-    for (int i = 0; i < dimension; i++) {
+    /*for (int i = 0; i < dimension; i++) {
         if (tID == true) continue;
         printf("Thread %d, l index: %d, weight: %d \n", tID, i, l[i]);
-    }
+    }*/
+    free(Vt);
+    free(l);
 }
 
 int main(void) {
@@ -108,6 +108,17 @@ int main(void) {
             index++;
         }
     }
+
+    /* Debug array initialization
+    bool* debugArray = (bool*)malloc(nodes * sizeof(bool*));
+    bool* debugArrayDevice;
+    cudaMalloc(&debugArrayDevice, nodes * sizeof(bool));
+    index = 0;
+    for (int i = 0; i < nodes; i++) {
+        debugArray[index] = false;
+        index++;
+    }
+    cudaMemcpy(debugArrayDevice, debugArray, nodes * sizeof(bool), cudaMemcpyHostToDevice);*/
 
     int* gpu_matrix;
     cudaError_t cudaError = cudaMalloc(&gpu_matrix, nodes * nodes * sizeof(int));
