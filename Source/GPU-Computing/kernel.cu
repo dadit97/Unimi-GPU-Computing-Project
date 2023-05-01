@@ -54,37 +54,60 @@ __global__ void shortestPath(int* matrix, int dimension) {
     // l vector initialization
     int* l = (int*)malloc(dimension * sizeof(int));
     
-    // Getting direct connections with source node maintaining the column fixed
-    // and jumping from row to row
+    // Getting direct connections with source node
     for (int i = 0; i < dimension; i++) {
-        l[i] = matrix[sourceNodeIndex + dimension * i];
+        l[i] = matrix[sourceNodeIndex * dimension + i];
     }
 
-    int closestWeigth = 50;
-    int closestIndex = sourceNodeIndex;
-    // while V != Vt
-    while (!areAllTrue(Vt, dimension)) {
+    /*if (tID == 1) {
+        printf("Initial l: ");
+        for (int i = 0; i < dimension; i++) {
+            printf("%d ", l[i]);
+        }
+        printf("\n");
+    }*/
 
+    
+    // while V != Vt
+    //while (!areAllTrue(Vt, dimension)) {
+    for (int x = 0; x < 10; x++) {
+
+        int closestWeigth = 50;
+        int closestIndex = sourceNodeIndex;
         // Find the next vertex closest to source node
         for (int i = 0; i < dimension; i++) {
             if (Vt[i] == true) continue;
-            if (l[i] != -1 && l[i] < closestWeigth) {
+            if (l[i] == -1) continue;
+            if (l[i] < closestWeigth) {
                 closestWeigth = l[i];
                 closestIndex = i;
-                if (tID == 0) printf("Thread %d, closestIndex:%d,  closestWeigth:%d\n", tID, closestIndex, closestWeigth);
+                
             }
         }
-
+        
         // Add closest vertex to Vt
         Vt[closestIndex] = true;
+
+        if (tID == 0) {
+            printf("Thread %d, closestIndex:%d,  closestWeigth:%d\n", tID, closestIndex, closestWeigth);
+            printf("l: ");
+            for (int i = 0; i < dimension; i++) {
+                printf("%d ", l[i]);
+            }
+            printf("\n");
+            printf("Vt: ");
+            for (int i = 0; i < dimension; i++) {
+                printf("%d ", Vt[i]);
+            }
+            printf("\n");
+        }
         
         // Recompute l
         for (int i = 0; i < dimension; i++) {
             if (Vt[i] == true) continue;
             int uvWeight = matrix[closestIndex * dimension + i];
-            if (l[i] > (l[closestIndex] + uvWeight)) {
-                l[i] = l[closestIndex] + uvWeight;
-            }
+            if (uvWeight == -1) continue;
+            l[i] = min(l[i], l[closestIndex] + uvWeight);
         }
     }
     /*for (int i = 0; i < dimension; i++) {
