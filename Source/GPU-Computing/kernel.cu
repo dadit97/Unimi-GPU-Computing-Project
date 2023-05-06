@@ -1,5 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <iostream>
+#include <random>
 #include <chrono>
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
@@ -20,6 +23,52 @@ int adj_matrix[10][10] = {
     {3 ,10 ,10 ,10 ,5 ,10 ,2 ,5 ,0 ,10},
     {10 ,5 ,4 ,3 ,2 ,5 ,1 ,5 ,10 ,0}
 };
+
+void getDataFromFile(int* matrix, int dimension, char* path) {
+
+    FILE* file = NULL;
+    file = fopen(path, "r");
+    char buffer[80];
+    char* token;
+    int number = 0;
+    int n0 = 0;
+    int n1 = 0;
+    int n2 = 0;
+    int counter = 0;
+
+    while (fgets(buffer, 80, file)) {
+        token = strtok(buffer, "\t");
+        while (token) {
+            number = atoi(token);
+            if (counter == 0) n0 = number;
+            if (counter == 1) n1 = number;
+            if (counter == 2) n2 = number;
+            token = strtok(NULL, "\t");
+            counter++;
+        }
+        printf("matrix[%d] = %d\n", n0 * dimension + n1, n2);
+        matrix[n0 * dimension + n1] = n2;
+        counter = 0;
+    }
+}
+
+int getRandomWeight() {
+    std::vector<int> list{ 1, 2, 3, 4, 5, 999999999 };
+    int index = rand() % list.size();
+    return list[index];
+}
+
+void generateRandomGraph(int* matrix, int dimension) {
+    int weight = 0;
+    for (int i = 0; i < dimension; i++) {
+        for (int j = 0; j < dimension; j++) {
+            if (i == j) weight = 0;
+            else weight = getRandomWeight();
+            matrix[i * dimension + j] = weight;
+            matrix[j * dimension + i] = weight;
+        }
+    }
+}
 
 __global__ void printThreadMatrixRow(int* matrix, int dimension) {
     int tID = threadIdx.x;
@@ -159,15 +208,29 @@ int main(void) {
     cudaSetDevice(0);
 
     int nodes = 10;
-
     int* matrix = (int*)malloc(nodes * nodes * sizeof(int*));
-    int index = 0;
+    for (int i = 0; i < nodes; i++) {
+        matrix[i] = 999999999;
+    }
+
+    printf("Generating random graph\n");
+    generateRandomGraph(matrix, nodes);
+    printf("Initial matrix loaded\n");
+
+    for (int i = 0; i < nodes; i++) {
+        for (int j = 0; j < nodes; j++) {
+            printf("%d ", matrix[i * nodes + j]);
+        }
+        printf("\n");
+    }
+
+    /*int index = 0;
     for (int i = 0; i < nodes; i++) {
         for (int j = 0; j < nodes; j++) {
             matrix[index] = adj_matrix[i][j];
             index++;
         }
-    }
+    }*/
 
     int* gpu_matrix;
     cudaError_t cudaError = cudaMalloc(&gpu_matrix, nodes * nodes * sizeof(int));
@@ -195,14 +258,19 @@ int main(void) {
         exit(1);
     }
     printf("Results matrix allocation completed\n");
+
+    using clock = std::chrono::system_clock;
+    using ms = std::chrono::duration<double, std::milli>;
+    auto before = clock::now();
     
     shortestPathsParallel<<<1, nodes >>>(gpu_matrix, nodes, resultsMatrix);
     cudaDeviceSynchronize();
 
+    ms duration = clock::now() - before;
+
     cudaError = cudaMemcpy(results, resultsMatrix, nodes * nodes * sizeof(int), cudaMemcpyDeviceToHost);
     if (cudaError != cudaSuccess) {
         printf("Error during results copy on Host: %s\n", cudaGetErrorString(cudaError));
-        exit(1);
     }
     printf("Results copy on Host completed\n");
 
@@ -214,6 +282,7 @@ int main(void) {
     }
 
     cudaFree(resultsMatrix);
+    printf("Kernel execution time: %f milliseconds\n", duration.count());
 
     //Sequential part
 
@@ -222,16 +291,19 @@ int main(void) {
         results[i] = 0;
     }
 
+    before = clock::now();
     shortestPathsSequential(matrix, nodes, results);
+    duration = clock::now() - before;
 
-    printf("Sequential algorithm completed\n");
+    /*printf("Sequential algorithm completed\n");
     for (int i = 0; i < nodes; i++) {
         for (int j = 0; j < nodes; j++) {
             printf("%d ", results[i * nodes + j]);
         }
         printf("\n");
-    }
+    }*/
     
+    printf("Sequential execution time: %f milliseconds\n", duration.count());
     free(results);
     free(matrix);
     return 0;
