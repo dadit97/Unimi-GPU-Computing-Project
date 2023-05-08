@@ -79,6 +79,16 @@
   <ItemGroup>
     <CudaCompile Include="example.cu" />
     <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="main.cu" />
+    <CudaCompile Include="sequential.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="data.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="data.h" />
+    <ClInclude Include="kernel.h" />
+    <ClInclude Include="sequential.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
