@@ -25,26 +25,25 @@ __device__ void initializeBoolVector(bool* vector, int dimension) {
 __global__ void shortestPathsParallel(int* matrix, int dimension, int* results) {
     // Each Thread computes the problem for the node with its tID index
     int tID = threadIdx.x;
-    int sourceNodeIndex = tID;
 
     // Boolean vector simulating the Vt set initialization
     bool* Vt = (bool*)malloc((dimension) * sizeof(bool));
     initializeBoolVector(Vt, dimension);
-    Vt[sourceNodeIndex] = true;
+    Vt[tID] = true;
 
     // l vector initialization
     int* l = (int*)malloc(dimension * sizeof(int));
     
     // Getting direct connections with source node
     for (int i = 0; i < dimension; i++) {
-        l[i] = matrix[sourceNodeIndex * dimension + i];
+        l[i] = matrix[tID * dimension + i];
     }
     
     // while V != Vt
     while (!areAllTrue(Vt, dimension)) {
 
         int closestWeigth = 999999999;
-        int closestIndex = sourceNodeIndex;
+        int closestIndex = tID;
 
         // Find the next vertex closest to source node
         for (int i = 0; i < dimension; i++) {
@@ -76,5 +75,28 @@ __global__ void shortestPathsParallel(int* matrix, int dimension, int* results) 
 }
 
 __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results) {
+    // Each Block computes the problem for the node with its blockID index
+    // Max threads per block = 1024
+    // Numero di thread per blocco = 1024/numero nodi 
+    int tID = threadIdx.x;
+    int bID = blockIdx.x;
 
+    // Shared memory initialization
+    extern __shared__ int s[];
+    int* sharedData = s;
+
+    // Boolean vector simulating the Vt set initialization
+    bool* Vt = (bool*)&sharedData[0];
+    Vt[tID] = false;
+    __syncthreads();
+    if (tID == 0) Vt[bID] = true;
+    __syncthreads();
+
+    // l vector initialization
+    int* l = (int*)&Vt[dimension];
+
+    // Getting direct connections with source node
+    l[tID] = matrix[bID * dimension + tID];
+
+    printf("Block %d Thread %d = %d\n",bID, tID, l[tID]);
 }

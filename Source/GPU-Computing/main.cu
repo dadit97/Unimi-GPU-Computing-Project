@@ -69,7 +69,7 @@ int main(void) {
     using ms = std::chrono::duration<double, std::milli>;
     auto before = clock::now();
 
-    shortestPathsParallel << <1, nodes >> > (gpu_matrix, nodes, resultsMatrix);
+    /*shortestPathsParallel << <1, nodes >> > (gpu_matrix, nodes, resultsMatrix);
     cudaError = cudaGetLastError();
 
     if (cudaError != cudaSuccess) {
@@ -98,19 +98,38 @@ int main(void) {
         printf("\n");
     }
 
+    printf("Kernel execution time: %f milliseconds\n", duration.count());*/
+
+    before = clock::now();
+    shortestPathsParallelV2 << <nodes, nodes, sizeof(bool) * nodes >> > (gpu_matrix, nodes, resultsMatrix);
+    cudaError = cudaGetLastError();
+
+    if (cudaError != cudaSuccess) {
+        printf("Error during kernel launch: %s\n", cudaGetErrorString(cudaError));
+        exit(1);
+    }
+
+    cudaError = cudaDeviceSynchronize();
+    if (cudaError != cudaSuccess) {
+        printf("Kernel syncronization returned error: %s\n", cudaGetErrorString(cudaError));
+        exit(1);
+    }
+
+    ms duration = clock::now() - before;
+
     cudaFree(resultsMatrix);
-    printf("Kernel execution time: %f milliseconds\n", duration.count());
+    printf("Kernel V2 execution time: %f milliseconds\n", duration.count());
 
     //Sequential part
 
     // Results matrix re-initialization
-    for (int i = 0; i < nodes * nodes; i++) {
+    /*for (int i = 0; i < nodes * nodes; i++) {
         results[i] = 0;
     }
 
     before = clock::now();
     shortestPathsSequential(matrix, nodes, results);
-    duration = clock::now() - before;
+    duration = clock::now() - before;*/
 
     /*printf("Sequential algorithm completed\n");
     for (int i = 0; i < nodes; i++) {
@@ -120,7 +139,7 @@ int main(void) {
         printf("\n");
     }*/
 
-    printf("Sequential execution time: %f milliseconds\n", duration.count());
+    //printf("Sequential execution time: %f milliseconds\n", duration.count());
     free(results);
     free(matrix);
     return 0;
