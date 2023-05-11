@@ -101,17 +101,17 @@ int main(void) {
     printf("Kernel execution time: %f milliseconds\n", duration.count());*/
 
     before = clock::now();
-    shortestPathsParallelV2 << <nodes, nodes, sizeof(bool) * nodes >> > (gpu_matrix, nodes, resultsMatrix);
+    shortestPathsParallelV2 << <nodes, nodes, sizeof(int) * nodes + sizeof(bool) * nodes >> > (gpu_matrix, nodes, resultsMatrix);
     cudaError = cudaGetLastError();
 
     if (cudaError != cudaSuccess) {
-        printf("Error during kernel launch: %s\n", cudaGetErrorString(cudaError));
+        printf("Error during kernel V2 launch: %s\n", cudaGetErrorString(cudaError));
         exit(1);
     }
 
     cudaError = cudaDeviceSynchronize();
     if (cudaError != cudaSuccess) {
-        printf("Kernel syncronization returned error: %s\n", cudaGetErrorString(cudaError));
+        printf("Kernel V2 syncronization returned error: %s\n", cudaGetErrorString(cudaError));
         exit(1);
     }
 

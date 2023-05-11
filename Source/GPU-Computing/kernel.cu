@@ -85,18 +85,49 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
     extern __shared__ int s[];
     int* sharedData = s;
 
+    // l vector initialization
+    int* l = (int*)&sharedData[0];
+
     // Boolean vector simulating the Vt set initialization
-    bool* Vt = (bool*)&sharedData[0];
+    bool* Vt = (bool*)&l[dimension];
     Vt[tID] = false;
     __syncthreads();
-    if (tID == 0) Vt[bID] = true;
+    if (tID == 0) {
+        Vt[bID] = true;
+    }
     __syncthreads();
-
-    // l vector initialization
-    int* l = (int*)&Vt[dimension];
 
     // Getting direct connections with source node
     l[tID] = matrix[bID * dimension + tID];
+    printf("l initialized\n");
 
-    printf("Block %d Thread %d = %d\n",bID, tID, l[tID]);
+    while (!areAllTrue(Vt, dimension)) {
+
+        int closestWeigth = 999999999;
+        int closestIndex = tID;
+
+        // Find the next vertex closest to source node
+        if (tID == 0) {
+            for (int i = 0; i < dimension; i++) {
+                if (Vt[tID] != true) {
+                    if (l[i] < closestWeigth) {
+                        closestWeigth = l[i];
+                        closestIndex = i;
+                    }
+                }
+            }
+            // Add closest vertex to Vt
+            Vt[closestIndex] = true;
+        }
+        __syncthreads();
+
+        // Recompute l
+        if (Vt[tID] != true) {
+            int uvWeight = matrix[closestIndex * dimension + tID];
+            l[tID] = min(l[tID], l[closestIndex] + uvWeight);
+        }
+        __syncthreads();
+    }
+
+    results[bID * dimension + tID] = l[tID];
 }
