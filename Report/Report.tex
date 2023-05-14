@@ -1,0 +1,70 @@
+\documentclass[
+	letterpaper, % Paper size, specify a4paper (A4) or letterpaper (US letter)
+	10pt, % Default font size, specify 10pt, 11pt or 12pt
+]{class}
+
+\usepackage{caption}
+\usepackage{soul}
+\usepackage{subcaption}
+
+\addbibresource{bibliography.bib} % Bibliography file (located in the same folder as the template)
+
+%----------------------------------------------------------------------------------------
+%	REPORT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{GPU Computing\\Parallel implementation of Dijkstra's Algorithm} % Report title
+
+\author{Tricella Davide 08361A} % Author name(s), add additional authors like: '\& James \textsc{Smith}'
+
+\date{\today} % Date of the report
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle % Insert the title, author and date using the information specified above
+
+\begin{center}
+    \begin{tabular}{l r}
+        Instructor: Professor \textsc{Grossi Giuliano}
+    \end{tabular}
+\end{center}
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+\begin{abstract}
+    The purpose of this paper is to describe the implementation and benchmarking of various parallel implementations of Dijkstra's Algorithm to solve the shortest path problem.
+\end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	TOC
+%----------------------------------------------------------------------------------------
+
+\tableofcontents
+
+\section{Definitions}\label{definitions} % Labels provide a point for referencing, in this case with \ref{definitions} to refer to this subsection number
+
+\begin{description}
+    \item[Dataset] The sample of data used to train the Model
+    \item[Label] The expected outcome of the prediction
+    \item[Model] The group of algorithms that tries to solve the problem
+    \item[Overfitting] When the model is too sensible to changes compared to the dataset
+    \item[Vanishing Gradient] When the gradient values becomes progressively smaller until they are insignificant for the process
+\end{description}
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+\section{Introduction}
+
+The following text details an analysis on the performances of various parallel versions of Dijkstra's algorithm, implemented through the CUDA Toolkit for parallel computation.\\
+
+\printbibliography % Output the bibliography
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
