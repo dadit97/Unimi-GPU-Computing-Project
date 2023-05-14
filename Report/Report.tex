@@ -45,23 +45,26 @@
 
 \tableofcontents
 
-\section{Definitions}\label{definitions} % Labels provide a point for referencing, in this case with \ref{definitions} to refer to this subsection number
-
-\begin{description}
-    \item[Dataset] The sample of data used to train the Model
-    \item[Label] The expected outcome of the prediction
-    \item[Model] The group of algorithms that tries to solve the problem
-    \item[Overfitting] When the model is too sensible to changes compared to the dataset
-    \item[Vanishing Gradient] When the gradient values becomes progressively smaller until they are insignificant for the process
-\end{description}
-
 %----------------------------------------------------------------------------------------
 %	INTRODUCTION
 %----------------------------------------------------------------------------------------
 
 \section{Introduction}
 
-The following text details an analysis on the performances of various parallel versions of Dijkstra's algorithm, implemented through the CUDA Toolkit for parallel computation.\\
+The problem of shortest path in a graph consists in finding the path, from node A to node B,
+which minimizes the sum of edges weights of which the path is composed.\\
+
+\begin{center}
+    \includegraphics[width=10cm]{../images/graph.png}
+    \captionof{figure}{Graph with edge weights}
+\end{center}
+
+In particular, the algorithm used for this document aim to solve the all-pairs shortest path problem,
+which consists of finding the lenght of the shortest path for all the pairs of nodes.\\
+
+The algorithm assumes that there are not negative weights and that the graph is undirected without isolated parts.\\
+
+This problem is tackled in a lot of practical applications, like road networks path-finding, telecommunication routing and robot navigation.
 
 \printbibliography % Output the bibliography
 

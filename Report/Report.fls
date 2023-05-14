@@ -868,7 +868,13 @@ INPUT Report.toc
 INPUT Report.toc
 INPUT C:\Users\dadit\AppData\Local\Programs\MiKTeX\fonts\tfm\public\xcharter\XCharter-Bold-tlf-t1.tfm
 OUTPUT Report.toc
+INPUT .\Figures\\..\images\graph.png
+INPUT Figures\\..\images\graph.png
+INPUT .\Figures\\..\images\graph.png
 OUTPUT Report.pdf
+INPUT .\Figures\\..\images\graph.png
+INPUT .\Figures\\..\images\graph.png
+INPUT .\Figures\\..\images\graph.png
 INPUT C:\Users\dadit\AppData\Local\Programs\MiKTeX\fonts\vf\public\xcharter\XCharter-Roman-tlf-t1.vf
 INPUT C:\Users\dadit\AppData\Local\Programs\MiKTeX\fonts\tfm\public\xcharter\XCharter-Roman-tlf-t1--base.tfm
 INPUT C:\Users\dadit\AppData\Local\MiKTeX\fonts\map\pdftex\pdftex.map

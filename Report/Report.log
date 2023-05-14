@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.5.14)  14 MAY 2023 19:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.5.14)  14 MAY 2023 22:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -870,32 +870,47 @@ LaTeX Font Info:    Font shape `T1/XCharter-TLF/b/n' will be
 \openout4 = `Report.toc'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 64--65
+Underfull \hbox (badness 10000) in paragraph at lines 54--56
+
+ []
+
+<Figures//../images/graph.png, id=1, 451.6875pt x 297.11pt>
+File: Figures//../images/graph.png Graphic file (type png)
+<use Figures//../images/graph.png>
+Package pdftex.def Info: Figures//../images/graph.png  used on input line 58.
+(pdftex.def)             Requested size: 284.52756pt x 187.16669pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 62--64
+
+ []
+
+[1
+
+{C:/Users/dadit/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch_rydp4l.enc}{C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch_yelf2i.enc} <./Figures//../images/graph.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 65--66
 
  []
 
 
-LaTeX Warning: Empty bibliography on input line 66.
+LaTeX Warning: Empty bibliography on input line 69.
 
-[1
-
-{C:/Users/dadit/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch_rydp4l.enc}{C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch_yelf2i.enc}] (Report.aux)
+[2] (Report.aux)
 Package logreq Info: Writing requests to 'Report.run.xml'.
 \openout1 = `Report.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 20894 strings out of 476331
- 423460 string characters out of 5787765
- 1857660 words of memory out of 5000000
- 41084 multiletter control sequences out of 15000+600000
+ 20909 strings out of 476331
+ 423811 string characters out of 5787765
+ 1855660 words of memory out of 5000000
+ 41096 multiletter control sequences out of 15000+600000
  600792 words of font info for 99 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  88i,6n,117p,740b,852s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/type1/public/xcharter/XCharter-Bold.pfb><C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/type1/public/xcharter/XCharter-Roman.pfb>
-Output written on Report.pdf (1 page, 121859 bytes).
+Output written on Report.pdf (2 pages, 167360 bytes).
 PDF statistics:
- 21 PDF objects out of 1000 (max. 8388607)
+ 27 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
