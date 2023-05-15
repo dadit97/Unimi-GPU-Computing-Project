@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.5.14)  14 MAY 2023 22:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.5.14)  15 MAY 2023 22:34
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -10,8 +10,8 @@ L3 programming layer <2023-03-30> (class.cls
 Document Class: class 2022/03/21 Creodocs University/School Laboratory Report Class v4.0
 (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
 Document Class: article 2022/07/02 v1.4n Standard LaTeX document class
-(C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/base\size10.clo
-File: size10.clo 2022/07/02 v1.4n Standard LaTeX file (size option)
+(C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/base\size12.clo
+File: size12.clo 2022/07/02 v1.4n Standard LaTeX file (size option)
 )
 \c@part=\count185
 \c@section=\count186
@@ -685,53 +685,53 @@ Package caption Info: New subtype `subfigure' on input line 239.
 Package caption Info: New subtype `subtable' on input line 239.
 \c@subtable=\count439
 )
-Package translations Info: No language package found. I am going to use `english' as default language. on input line 24.
-LaTeX Info: Redefining \oldstylenums on input line 24.
-LaTeX Font Info:    Trying to load font information for T1+XCharter-TLF on input line 24.
+Package translations Info: No language package found. I am going to use `english' as default language. on input line 28.
+LaTeX Info: Redefining \oldstylenums on input line 28.
+LaTeX Font Info:    Trying to load font information for T1+XCharter-TLF on input line 28.
  (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/xcharter\t1xcharter-tlf.fd
 File: T1XCharter-TLF.fd 2017/06/25 (autoinst) Font definitions for T1/XCharter-TLF.
 )
 LaTeX Font Info:    Font shape `T1/XCharter-TLF/m/n' will be
-(Font)              scaled to size 9.60007pt on input line 24.
+(Font)              scaled to size 11.52008pt on input line 28.
 \@quotelevel=\count440
 \@quotereset=\count441
  (Report.aux)
 \openout1 = `Report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/zchmi/m/it on input line 24.
-LaTeX Font Info:    Trying to load font information for OML+zchmi on input line 24.
+LaTeX Font Info:    Checking defaults for OML/zchmi/m/it on input line 28.
+LaTeX Font Info:    Trying to load font information for OML+zchmi on input line 28.
  (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/xcharter\omlzchmi.fd
 File: omlzchmi.fd 2019/11/21 Fontinst v1.933 font definitions for OML/zchmi.
 )
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 24.
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 24.
-LaTeX Font Info:    Trying to load font information for U+ntxexa on input line 24.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 28.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 28.
+LaTeX Font Info:    Trying to load font information for U+ntxexa on input line 28.
  (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/newtx\untxexa.fd
 File: untxexa.fd 2012/04/16 Fontinst v1.933 font definitions for U/ntxexa.
 )
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 24.
-LaTeX Font Info:    Trying to load font information for LMS+ntxsy on input line 24.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for LMS/ntxsy/m/n on input line 28.
+LaTeX Font Info:    Trying to load font information for LMS+ntxsy on input line 28.
  (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/newtx\lmsntxsy.fd
 File: lmsntxsy.fd 2016/07/02 Fontinst v1.933 font definitions for LMS/ntxsy.
 )
-LaTeX Font Info:    ... okay on input line 24.
-LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 24.
-LaTeX Font Info:    Trying to load font information for LMX+ntxexx on input line 24.
+LaTeX Font Info:    ... okay on input line 28.
+LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 28.
+LaTeX Font Info:    Trying to load font information for LMX+ntxexx on input line 28.
  (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/newtx\lmxntxexx.fd
 File: lmxntxexx.fd 2016/07/03 Fontinst v1.933 font definitions for LMX/ntxexx.
 )
-LaTeX Font Info:    ... okay on input line 24.
+LaTeX Font Info:    ... okay on input line 28.
  (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count442
@@ -751,10 +751,10 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-LaTeX Info: Command `\dddot' is already robust on input line 24.
-LaTeX Info: Command `\ddddot' is already robust on input line 24.
+LaTeX Info: Command `\dddot' is already robust on input line 28.
+LaTeX Info: Command `\ddddot' is already robust on input line 28.
 
-Package chemgreek Info: Activating mapping `newtx' on line 24.
+Package chemgreek Info: Activating mapping `newtx' on line 28.
 
  (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/graphics\color.sty
 Package: color 2022/01/06 v1.3d Standard LaTeX Color (DPC)
@@ -765,33 +765,33 @@ Package color Info: Driver file: pdftex.def on input line 149.
  (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx)) (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/translations/dicts\translations-basic-dictionary-english.trsl
 File: translations-basic-dictionary-english.trsl (english translation file `translations-basic-dictionary')
 )
-Package translations Info: loading dictionary `translations-basic-dictionary' for `english'. on input line 24.
+Package translations Info: loading dictionary `translations-basic-dictionary' for `english'. on input line 28.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
 * driver: pdftex
-* paper: letterpaper
+* paper: a4paper
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(135.15059pt, 343.99382pt, 135.15059pt)
-* v-part:(T,H,B)=(120.92421pt, 560.23476pt, 113.81102pt)
-* \paperwidth=614.295pt
-* \paperheight=794.96999pt
-* \textwidth=343.99382pt
-* \textheight=560.23476pt
-* \oddsidemargin=62.8806pt
-* \evensidemargin=62.8806pt
+* h-part:(L,W,R)=(135.15059pt, 327.2067pt, 135.15059pt)
+* v-part:(T,H,B)=(120.92421pt, 610.31161pt, 113.81102pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=453.67918pt
+* \textheight=610.31161pt
+* \oddsidemargin=1.45067pt
+* \evensidemargin=1.45067pt
 * \topmargin=11.65422pt
 * \headheight=12.0pt
 * \headsep=25.0pt
-* \topskip=10.0pt
+* \topskip=12.0pt
 * \footskip=30.0pt
-* \marginparwidth=65.0pt
-* \marginparsep=11.0pt
+* \marginparwidth=35.0pt
+* \marginparsep=10.0pt
 * \columnsep=10.0pt
-* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
 * \hoffset=0.0pt
 * \voffset=0.0pt
 * \mag=1000
@@ -816,101 +816,110 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'Report.bbl' found.
  (Report.bbl)
-Package biblatex Info: Reference section=0 on input line 24.
-Package biblatex Info: Reference segment=0 on input line 24.
+Package biblatex Info: Reference section=0 on input line 28.
+Package biblatex Info: Reference segment=0 on input line 28.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Font shape `T1/XCharter-TLF/m/n' will be
-(Font)              scaled to size 16.58891pt on input line 26.
+(Font)              scaled to size 19.91054pt on input line 30.
 LaTeX Font Info:    Font shape `T1/XCharter-TLF/m/n' will be
-(Font)              scaled to size 11.52008pt on input line 26.
-LaTeX Font Info:    Trying to load font information for OT1+XCharter-TLF on input line 26.
+(Font)              scaled to size 13.82408pt on input line 30.
+LaTeX Font Info:    Trying to load font information for OT1+XCharter-TLF on input line 30.
  (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/xcharter\ot1xcharter-tlf.fd
 File: OT1XCharter-TLF.fd 2017/06/25 (autoinst) Font definitions for OT1/XCharter-TLF.
 )
 LaTeX Font Info:    Font shape `OT1/XCharter-TLF/m/n' will be
-(Font)              scaled to size 11.52008pt on input line 26.
+(Font)              scaled to size 13.82408pt on input line 30.
 LaTeX Font Info:    Font shape `OT1/XCharter-TLF/m/n' will be
-(Font)              scaled to size 8.44806pt on input line 26.
+(Font)              scaled to size 10.08006pt on input line 30.
 LaTeX Font Info:    Font shape `OT1/XCharter-TLF/m/n' will be
-(Font)              scaled to size 6.33604pt on input line 26.
-LaTeX Font Info:    Trying to load font information for U+ntxmia on input line 26.
+(Font)              scaled to size 7.58405pt on input line 30.
+LaTeX Font Info:    Trying to load font information for U+ntxmia on input line 30.
  (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/newtx\untxmia.fd
 File: untxmia.fd 2018/04/14 Fontinst v1.933 font definitions for U/ntxmia.
 )
-LaTeX Font Info:    Trying to load font information for U+ntxsym on input line 26.
+LaTeX Font Info:    Trying to load font information for U+ntxsym on input line 30.
  (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/newtx\untxsym.fd
 File: untxsym.fd 2015/03/20 Fontinst v1.933 font definitions for U/ntxsym.
 )
-LaTeX Font Info:    Trying to load font information for U+ntxsyc on input line 26.
+LaTeX Font Info:    Trying to load font information for U+ntxsyc on input line 30.
  (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/newtx\untxsyc.fd
 File: untxsyc.fd 2012/04/12 Fontinst v1.933 font definitions for U/ntxsyc.
 )
 LaTeX Font Info:    Font shape `OT1/XCharter-TLF/m/n' will be
-(Font)              scaled to size 9.60007pt on input line 29.
+(Font)              scaled to size 11.52008pt on input line 33.
 LaTeX Font Info:    Font shape `OT1/XCharter-TLF/m/n' will be
-(Font)              scaled to size 7.00804pt on input line 29.
+(Font)              scaled to size 8.44806pt on input line 33.
 LaTeX Font Info:    Font shape `OT1/XCharter-TLF/m/n' will be
-(Font)              scaled to size 5.28003pt on input line 29.
+(Font)              scaled to size 6.33604pt on input line 33.
 LaTeX Font Info:    Font shape `T1/XCharter-TLF/m/sc' will be
-(Font)              scaled to size 9.60007pt on input line 30.
+(Font)              scaled to size 11.52008pt on input line 34.
 LaTeX Font Info:    Font shape `T1/XCharter-TLF/m/n' will be
-(Font)              scaled to size 8.64006pt on input line 38.
+(Font)              scaled to size 10.51207pt on input line 42.
 LaTeX Font Info:    Font shape `T1/XCharter-TLF/b/n' will be
-(Font)              scaled to size 8.64006pt on input line 38.
+(Font)              scaled to size 10.51207pt on input line 42.
 LaTeX Font Info:    Font shape `T1/XCharter-TLF/m/n' will be
-(Font)              scaled to size 13.82408pt on input line 46.
+(Font)              scaled to size 16.58891pt on input line 50.
 LaTeX Font Info:    Font shape `T1/XCharter-TLF/b/n' will be
-(Font)              scaled to size 13.82408pt on input line 46.
+(Font)              scaled to size 16.58891pt on input line 50.
  (Report.toc
 LaTeX Font Info:    Font shape `T1/XCharter-TLF/b/n' will be
-(Font)              scaled to size 9.60007pt on input line 1.
+(Font)              scaled to size 11.52008pt on input line 1.
 )
 \tf@toc=\write4
 \openout4 = `Report.toc'.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 54--56
+Underfull \hbox (badness 10000) in paragraph at lines 58--60
 
  []
 
 <Figures//../images/graph.png, id=1, 451.6875pt x 297.11pt>
 File: Figures//../images/graph.png Graphic file (type png)
 <use Figures//../images/graph.png>
-Package pdftex.def Info: Figures//../images/graph.png  used on input line 58.
+Package pdftex.def Info: Figures//../images/graph.png  used on input line 62.
 (pdftex.def)             Requested size: 284.52756pt x 187.16669pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 62--64
-
- []
-
 [1
 
-{C:/Users/dadit/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch_rydp4l.enc}{C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch_yelf2i.enc} <./Figures//../images/graph.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 65--66
+{C:/Users/dadit/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch_rydp4l.enc}{C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch_yelf2i.enc}]
+Underfull \hbox (badness 10000) in paragraph at lines 66--68
 
  []
 
 
-LaTeX Warning: Empty bibliography on input line 69.
+Underfull \hbox (badness 10000) in paragraph at lines 69--70
 
-[2] (Report.aux)
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 74--76
+
+ []
+
+LaTeX Font Info:    Font shape `T1/XCharter-TLF/b/n' will be
+(Font)              scaled to size 13.82408pt on input line 79.
+LaTeX Font Info:    Font shape `T1/XCharter-TLF/m/it' will be
+(Font)              scaled to size 11.52008pt on input line 94.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 94.
+(C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/base\t1cmtt.fd
+File: t1cmtt.fd 2022/07/10 v2.5l Standard LaTeX font definitions
+) [2 <./Figures//../images/graph.png>] [3] (Report.aux)
 Package logreq Info: Writing requests to 'Report.run.xml'.
 \openout1 = `Report.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 20909 strings out of 476331
- 423811 string characters out of 5787765
- 1855660 words of memory out of 5000000
- 41096 multiletter control sequences out of 15000+600000
- 600792 words of font info for 99 fonts, out of 8000000 for 9000
+ 21145 strings out of 476331
+ 428928 string characters out of 5787765
+ 1857660 words of memory out of 5000000
+ 41325 multiletter control sequences out of 15000+600000
+ 614183 words of font info for 105 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 88i,6n,117p,740b,852s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/type1/public/xcharter/XCharter-Bold.pfb><C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/type1/public/xcharter/XCharter-Roman.pfb>
-Output written on Report.pdf (2 pages, 167360 bytes).
+ 88i,6n,117p,740b,1430s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ <C:\Users\dadit\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1200.pk><C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/type1/public/xcharter/XCharter-Bold.pfb><C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/type1/public/xcharter/XCharter-Italic.pfb><C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/type1/public/xcharter/XCharter-Roman.pfb>
+Output written on Report.pdf (3 pages, 229018 bytes).
 PDF statistics:
- 27 PDF objects out of 1000 (max. 8388607)
+ 66 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

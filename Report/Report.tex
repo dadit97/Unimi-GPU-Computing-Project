@@ -1,7 +1,11 @@
 \documentclass[
-	letterpaper, % Paper size, specify a4paper (A4) or letterpaper (US letter)
-	10pt, % Default font size, specify 10pt, 11pt or 12pt
+	a4paper, % Paper size, specify a4paper (A4) or letterpaper (US letter)
+	12pt, % Default font size, specify 10pt, 11pt or 12pt
 ]{class}
+
+\addtolength{\textwidth}{1.75in}
+\addtolength{\oddsidemargin}{-.850in}
+\addtolength{\evensidemargin}{-.850in}
 
 \usepackage{caption}
 \usepackage{soul}
@@ -65,6 +69,27 @@ which consists of finding the lenght of the shortest path for all the pairs of n
 The algorithm assumes that there are not negative weights and that the graph is undirected without isolated parts.\\
 
 This problem is tackled in a lot of practical applications, like road networks path-finding, telecommunication routing and robot navigation.
+
+\section{Dijkstra’s algorithm}
+To solve the problem introduced before, it was decided to implement the Dijkstra’s algorithm, using the paper \cite{paper}
+as a guidance.\\
+
+The first version implemented was basically a parallel extension of the sequential algorithm,
+then a more advanced approach has been taken for the improved version.
+\subsection{Sequential Version}
+
+
+\subsection{Basic parallel version}
+
+\subsection{Improved parallel version}
+
+\section{Implementation details}
+
+\subsection{Data structures}
+
+\section{Benchmarking}
+
+\subsection{Sequential vs Parallel}
 
 \printbibliography % Output the bibliography
 
