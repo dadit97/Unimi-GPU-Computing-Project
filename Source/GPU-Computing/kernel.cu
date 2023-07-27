@@ -100,7 +100,6 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
 
     // Getting direct connections with source node
     l[tID] = matrix[bID * dimension + tID];
-    printf("l initialized\n");
 
     while (!areAllTrue(Vt, dimension)) {
 
