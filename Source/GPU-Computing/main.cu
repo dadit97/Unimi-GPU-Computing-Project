@@ -69,7 +69,11 @@ int main(void) {
     using ms = std::chrono::duration<double, std::milli>;
     auto before = clock::now();
 
-    /*shortestPathsParallel << <1, nodes >> > (gpu_matrix, nodes, resultsMatrix);
+    //KERNEL V1 PART
+
+    printf("\n\nKERNEL V1 PART\n\n");
+
+    shortestPathsParallel <<<1, nodes >>> (gpu_matrix, nodes, resultsMatrix);
     cudaError = cudaGetLastError();
 
     if (cudaError != cudaSuccess) {
@@ -98,10 +102,14 @@ int main(void) {
         printf("\n");
     }
 
-    printf("Kernel execution time: %f milliseconds\n", duration.count());*/
+    printf("Kernel execution time: %f milliseconds\n", duration.count());
+
+    // KERNEL V2 PART
+
+    printf("\n\nKERNEL V2 PART\n\n");
 
     before = clock::now();
-    shortestPathsParallelV2 << <nodes, nodes, sizeof(int) * nodes + sizeof(bool) * nodes >> > (gpu_matrix, nodes, resultsMatrix);
+    shortestPathsParallelV2 <<<nodes, nodes, sizeof(int) * nodes + sizeof(bool) * nodes >>> (gpu_matrix, nodes, resultsMatrix);
     cudaError = cudaGetLastError();
 
     if (cudaError != cudaSuccess) {
@@ -115,31 +123,46 @@ int main(void) {
         exit(1);
     }
 
-    ms duration = clock::now() - before;
+    duration = clock::now() - before;
 
-    cudaFree(resultsMatrix);
-    printf("Kernel V2 execution time: %f milliseconds\n", duration.count());
-
-    //Sequential part
-
-    // Results matrix re-initialization
-    /*for (int i = 0; i < nodes * nodes; i++) {
-        results[i] = 0;
+    cudaError = cudaMemcpy(results, resultsMatrix, nodes * nodes * sizeof(int), cudaMemcpyDeviceToHost);
+    if (cudaError != cudaSuccess) {
+        printf("Error during results copy on Host: %s\n", cudaGetErrorString(cudaError));
     }
+    printf("Results copy on Host completed\n");
 
-    before = clock::now();
-    shortestPathsSequential(matrix, nodes, results);
-    duration = clock::now() - before;*/
-
-    /*printf("Sequential algorithm completed\n");
     for (int i = 0; i < nodes; i++) {
         for (int j = 0; j < nodes; j++) {
             printf("%d ", results[i * nodes + j]);
         }
         printf("\n");
-    }*/
+    }
 
-    //printf("Sequential execution time: %f milliseconds\n", duration.count());
+    cudaFree(resultsMatrix);
+    printf("Kernel V2 execution time: %f milliseconds\n", duration.count());
+
+    //SEQUENTIAL PART
+
+    // Results matrix re-initialization
+    for (int i = 0; i < nodes * nodes; i++) {
+        results[i] = 0;
+    }
+
+    printf("\n\nSEQUENTIAL PART\n\n");
+
+    before = clock::now();
+    shortestPathsSequential(matrix, nodes, results);
+    duration = clock::now() - before;
+
+    printf("Sequential algorithm completed\n");
+    for (int i = 0; i < nodes; i++) {
+        for (int j = 0; j < nodes; j++) {
+            printf("%d ", results[i * nodes + j]);
+        }
+        printf("\n");
+    }
+
+    printf("Sequential execution time: %f milliseconds\n", duration.count());
     free(results);
     free(matrix);
     return 0;

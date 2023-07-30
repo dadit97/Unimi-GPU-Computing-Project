@@ -92,6 +92,7 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
     bool* Vt = (bool*)&l[dimension];
     Vt[tID] = false;
     __syncthreads();
+
     if (tID == 0) {
         Vt[bID] = true;
     }
@@ -101,24 +102,22 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
     // Getting direct connections with source node
     l[tID] = matrix[bID * dimension + tID];
 
+    //FINO A QUI OK
+
     while (!areAllTrue(Vt, dimension)) {
 
         int closestWeigth = 999999999;
         int closestIndex = tID;
 
         // Find the next vertex closest to source node
-        if (tID == 0) {
-            for (int i = 0; i < dimension; i++) {
-                if (Vt[tID] != true) {
-                    if (l[i] < closestWeigth) {
-                        closestWeigth = l[i];
-                        closestIndex = i;
-                    }
-                }
+        if (Vt[tID] != true) {
+            if (l[tID] < closestWeigth) {
+                closestWeigth = l[tID];
+                closestIndex = tID;
             }
-            // Add closest vertex to Vt
-            Vt[closestIndex] = true;
         }
+        // Add closest vertex to Vt
+        Vt[closestIndex] = true;
         __syncthreads();
 
         // Recompute l
