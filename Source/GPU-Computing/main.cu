@@ -109,7 +109,7 @@ int main(void) {
     printf("\n\nKERNEL V2 PART\n\n");
 
     before = clock::now();
-    shortestPathsParallelV2 <<<nodes, nodes, sizeof(int) * nodes + sizeof(bool) * nodes >>> (gpu_matrix, nodes, resultsMatrix);
+    shortestPathsParallelV2 <<<nodes, nodes, sizeof(int) * nodes * 2 + sizeof(bool) * nodes >>> (gpu_matrix, nodes, resultsMatrix);
     cudaError = cudaGetLastError();
 
     if (cudaError != cudaSuccess) {

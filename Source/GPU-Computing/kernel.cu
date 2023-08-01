@@ -88,8 +88,15 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
     // l vector initialization
     int* l = (int*)&sharedData[0];
 
+    // min vector initialization
+    int* min = (int*)&l[dimension];
+
+    bool isDimensionOdd = dimension % 2;
+    int threadsToMinimize = isDimensionOdd ? (dimension / 2) + 1 : dimension / 2;
+
     // Boolean vector simulating the Vt set initialization
-    bool* Vt = (bool*)&l[dimension];
+    bool* Vt = (bool*)&min[dimension];
+    
     Vt[tID] = false;
     __syncthreads();
 
@@ -102,8 +109,14 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
     // Getting direct connections with source node
     l[tID] = matrix[bID * dimension + tID];
 
+    // Filling min shared vector
+    min[tID] = matrix[bID * dimension + tID];
+
+    __syncthreads();
+
     //FINO A QUI OK
 
+    // while V != Vt
     while (!areAllTrue(Vt, dimension)) {
 
         int closestWeigth = 999999999;
