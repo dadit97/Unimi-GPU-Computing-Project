@@ -90,16 +90,9 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
 
     // min vector initialization
     int* min = (int*)&l[dimension];
+    min[tID] = matrix[bID * dimension + tID];
 
-    // in-place reduction
-    for (int stride = 1; stride < blockDim.x; stride *= 2) {
-        // convert tid into local array index
-        int index = 2 * stride * tID;
-        if (index < blockDim.x)
-            l[index] = atomicMin(l[index], l[index + stride]);
-        // synchronize within threadblock
-        __syncthreads();
-    }
+    
 
     // Boolean vector simulating the Vt set initialization
     bool* Vt = (bool*)&min[dimension];
@@ -129,8 +122,22 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
         int closestWeigth = 999999999;
         int closestIndex = tID;
 
+        //FASE 1 : ricerca lineare del nodo più vicino localmente
+        //FASE 2 : Riduzione per trovare il più vicino globale
+
         // Find the next vertex closest to source node
         if (Vt[tID] != true) {
+
+            // in-place reduction
+            for (int stride = 1; stride < blockDim.x; stride *= 2) {
+                // convert tid into local array index
+                int index = 2 * stride * tID;
+                if (index < blockDim.x)
+                    min[index] = atomicMin(min[index], min[index + stride]);
+                // synchronize within threadblock
+                __syncthreads();
+            }
+
             if (l[tID] < closestWeigth) {
                 closestWeigth = l[tID];
                 closestIndex = tID;
