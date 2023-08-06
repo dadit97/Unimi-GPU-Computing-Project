@@ -24,6 +24,25 @@ void generateRandomGraph(int* matrix, int dimension) {
     }
 }
 
+void getBasicGraph(int* matrix) {
+    matrix[0] = 0;
+    matrix[1] = 4;
+    matrix[2] = 1;
+    matrix[3] = 3;
+    matrix[4] = 4;
+    matrix[5] = 0;
+    matrix[6] = 2;
+    matrix[7] = 999999999;
+    matrix[8] = 1;
+    matrix[9] = 2;
+    matrix[10] = 0;
+    matrix[11] = 1;
+    matrix[12] = 3;
+    matrix[13] = 999999999;
+    matrix[14] = 1;
+    matrix[15] = 0;
+}
+
 //Not used, replaced by random generation
 void getDataFromFile(int* matrix, int dimension, char* path) {
 

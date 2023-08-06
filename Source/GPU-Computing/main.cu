@@ -14,14 +14,13 @@ int main(void) {
     //Kernel part
     cudaSetDevice(0);
 
-    int nodes = 10;
+    int nodes = 4;
     int* matrix = (int*)malloc(nodes * nodes * sizeof(int*));
     for (int i = 0; i < nodes; i++) {
         matrix[i] = 999999999;
     }
 
-    printf("Generating random graph\n");
-    generateRandomGraph(matrix, nodes);
+    getBasicGraph(matrix);
     printf("Initial matrix loaded\n");
 
     for (int i = 0; i < nodes; i++) {
@@ -109,7 +108,7 @@ int main(void) {
     printf("\n\nKERNEL V2 PART\n\n");
 
     before = clock::now();
-    shortestPathsParallelV2 <<<nodes, nodes, sizeof(int) * nodes * 2 + sizeof(bool) * nodes >>> (gpu_matrix, nodes, resultsMatrix);
+    shortestPathsParallelV2 <<<nodes, nodes, sizeof(int) * nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes >>> (gpu_matrix, nodes, resultsMatrix);
     cudaError = cudaGetLastError();
 
     if (cudaError != cudaSuccess) {
