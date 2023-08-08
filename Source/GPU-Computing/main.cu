@@ -116,6 +116,12 @@ int main(void) {
         exit(1);
     }
 
+    cudaError = cudaPeekAtLastError();
+    if (cudaError != cudaSuccess) {
+        printf("Error during kernel V2 execution: %s\n", cudaGetErrorString(cudaError));
+        exit(1);
+    }
+
     cudaError = cudaDeviceSynchronize();
     if (cudaError != cudaSuccess) {
         printf("Kernel V2 syncronization returned error: %s\n", cudaGetErrorString(cudaError));

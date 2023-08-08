@@ -29,10 +29,8 @@ __device__ void initializeBoolVector(bool* vector, int dimension) {
 }
 
 // FIXME
-__device__ int minIndex(int* vector, int indexA, int indexB) {
-    if (vector[indexA] == 0) return indexB + blockDim.x;
-    if (vector[indexB == 0]) return indexA + blockDim.x;
-    return vector[indexA] < vector[indexB] ? indexA + blockDim.x : indexB + blockDim.x;
+__device__ int minIndex(int* vector, int min, int indexA, int indexB) {
+    return vector[indexA] == min ? indexA : indexB;
 }
 
 __device__ int minWithoutZero(int a, int b) {
@@ -99,6 +97,7 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
     // Numero di thread per blocco = min(1024/numero nodi, nodi di una riga)
     int tID = threadIdx.x;
     int bID = blockIdx.x;
+    int bDim = blockDim.x;
 
     // Shared memory initialization
     extern __shared__ int s[];
@@ -108,10 +107,10 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
     int* l = (int*)&sharedData[0];
 
     // minimum vector initialization, first half are values second half are indexes
-    int* minimum = (int*)&l[blockDim.x];
+    int* minimum = (int*)&l[bDim];
 
     // Boolean vector simulating the Vt set initialization
-    bool* Vt = (bool*)&minimum[blockDim.x * 2];
+    bool* Vt = (bool*)&minimum[bDim * 2];
     
     Vt[tID] = false;
 
@@ -137,26 +136,38 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
 
         // Restoring min shared vector from l vector
         minimum[tID] = Vt[tID] ? 99999999 : l[tID];
-        minimum[tID + blockDim.x] = tID;
+        minimum[tID + bDim] = tID;
 
         __syncthreads();
 
-        if (bID == 0) {
+        /*if (bID == 0 && tID == 0) {
             printf("%d - %d | %d ||", minimum[tID], minimum[blockDim.x + tID], Vt[tID]);
-            //printf("%d | ", Vt[tID]);
-            if (tID == blockDim.x - 1) printf("\n");
+            printf("\n");
         }
 
-        __syncthreads();
+        __syncthreads();*/
 
         // in-place reduction
-        for (int stride = 1; stride < blockDim.x; stride *= 2) {
+        for (int stride = 1; stride < bDim; stride *= 2) {
+            /*if (bID == 0) {
+                if (tID == 0) printf("\n");
+                printf("%d ", minimum[tID]);
+            }
+            __syncthreads();*/
             // convert tid into local array index
             int index = 2 * stride * tID;
-            if (index < blockDim.x) {
+            if (index < bDim) {
                 //FIXME
-                minimum[index + blockDim.x] = minIndex(minimum, index, index + stride);
-                minimum[index] = minWithoutZero(minimum[index], minimum[index + stride]);
+
+                int localMin = min(minimum[index], minimum[index + stride]);
+                minimum[index + bDim] = minIndex(minimum, localMin, index, index + stride);
+                minimum[index] = localMin;
+
+                if (bID == 0) {
+                    if (tID == 0) printf("\n");
+                    printf("%d ", minimum[tID]);
+                }
+                __syncthreads();
             }
             // synchronize within threadblock
             __syncthreads();
@@ -164,14 +175,20 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
 
         // Add closest vertex to Vt
         if (tID == 0) {
-            Vt[minimum[blockDim.x]] = true;
+            Vt[minimum[bDim]] = true;
+            //printf("Index of node to add to Vt: %d\n", minimum[blockDim.x]);
         }
         __syncthreads();
 
         // Recompute l
+        /*if (bID == 0) {
+            if (tID == 0) printf("\n");
+            printf("%d ", l[tID]);
+        }
+        __syncthreads();*/
         if (!Vt[tID]) {
-            int uvWeight = matrix[minimum[blockDim.x] * dimension + tID];
-            l[tID] = min(l[tID], l[minimum[blockDim.x]] + uvWeight);
+            int uvWeight = matrix[minimum[bDim] * dimension + tID];
+            l[tID] = min(l[tID], l[minimum[bDim]] + uvWeight);
         }
 
         //if (bID == 0 && tID == 0) printf("l[tID]: %d, vT[tID]: %d, closestIndex: %d\n", l[tID], Vt[tID], minimum[blockDim.x]);
