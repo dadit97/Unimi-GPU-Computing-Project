@@ -28,14 +28,14 @@ __device__ void initializeBoolVector(bool* vector, int dimension) {
     }
 }
 
-// FIXME
-__device__ int minIndex(int* vector, int min, int indexA, int indexB) {
-    return vector[indexA] == min ? indexA : indexB;
+
+__device__ int minIndex(int value, int min, int nodeIndexA, int nodeIndexB) {
+    return value == min ? nodeIndexA : nodeIndexB;
 }
 
-__device__ int minWithoutZero(int a, int b) {
-    if (a == 0) return b;
-    if (b == 0) return a;
+__device__ int minWithVt(int a, int b, bool VtA, bool VtB) {
+    if (VtA) return b;
+    if (VtB) return a;
     return min(a, b);
 }
 
@@ -126,11 +126,6 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
 
     __syncthreads();
 
-    //FASE 1 : ricerca lineare del nodo più vicino localmente
-    // IN QUESTO CASO HO UN THREAD PER NODO, QUINDI IL LOCALE E' GIA' NOTO
-
-    //FASE 2 : Riduzione per trovare il più vicino globale
-
     while (true) {
 
         if (tID == 0) {
@@ -144,60 +139,34 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
         __syncthreads();
 
         // Restoring min shared vector from l vector
-        minimum[tID] = Vt[tID] ? 99999999 : l[tID];
+        minimum[tID] = l[tID];
         minimum[tID + bDim] = tID;
-
-        /*if (bID == 0) {
-            if (tID == 0) {
-                printf("\n\n\n");
-            }
-            printf("TID:%d,value:%d ",tID, minimum[tID]);
-        }
-        __syncthreads();*/
 
         __syncthreads();
 
-        /*if (bID == 0 && tID == 0) {
-            printf("%d - %d | %d ||", minimum[tID], minimum[blockDim.x + tID], Vt[tID]);
-            printf("\n");
-        }
-
-        __syncthreads();*/
-
         // in-place reduction
         for (int stride = 1; stride < bDim; stride *= 2) {
-            /*if (bID == 0) {
-                if (tID == 0) printf("\n");
-                printf("%d ", minimum[tID]);
-            }
-            __syncthreads();*/
             // convert tid into local array index
             int index = 2 * stride * tID;
             if (index < bDim) {
+                int localMin = minWithVt(
+                    minimum[index],
+                    minimum[index + stride],
+                    Vt[minimum[index + bDim]],
+                    Vt[minimum[index + stride + bDim]]
+                );
 
-                int localMinBefore = minimum[index];
-                int localMinIndexBefore = minimum[index + bDim];
-                int localMin = min(minimum[index], minimum[index + stride]);
-                int localMinIndex = minIndex(minimum, localMin, index, index + stride);
+                int localMinIndex = minIndex(
+                    minimum[index],
+                    localMin,
+                    minimum[index + bDim],
+                    minimum[index + stride + bDim]
+                );
                 minimum[index + bDim] = localMinIndex;
                 minimum[index] = localMin;
-
-                /*if (bID == 0) {
-                    if (tID == 0) printf("\n\n");
-                    __syncthreads();
-                    printf("tID %d: %d,%d - %d,%d ", tID, localMinBefore, localMinIndexBefore, localMin, localMinIndex);
-                }
-                __syncthreads();*/
             }
             // synchronize within threadblock
             __syncthreads();
-        }
-
-        if (bID == 0) {
-            if (tID == 0) printf("\n\n");
-            __syncthreads();
-            printf("%d - %d | %d ||", minimum[tID], minimum[blockDim.x + tID], Vt[tID]);
-            printf("\n");
         }
 
         __syncthreads();
@@ -205,74 +174,18 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
         // Add closest vertex to Vt
         if (tID == 0) {
             Vt[minimum[bDim]] = true;
-            //if(bID == 0)printf("%d-%d\n", minimum[bDim], minimum[0]);
         }
         __syncthreads();
 
         // Recompute l
-        /*if (bID == 0) {
-            if (tID == 0) printf("\n\n\n");
-            printf("%d,%d ", Vt[tID], l[tID]);
-        }
-        __syncthreads();*/
         if (!Vt[tID]) {
-            /*if (bID == 0) {
-                if (tID == 0) printf("\n\n\n");
-                printf("%d,%d ", Vt[tID], l[tID]);
-            }
-            __syncthreads();*/
             int uvWeight = matrix[minimum[bDim] * dimension + tID];
             l[tID] = min(l[tID], l[minimum[bDim]] + uvWeight);
             __syncthreads();
         }
 
-        //if (bID == 0 && tID == 0) printf("l[tID]: %d, vT[tID]: %d, closestIndex: %d\n", l[tID], Vt[tID], minimum[blockDim.x]);
-
         __syncthreads();
     }
 
     results[bID * dimension + tID] = l[tID];
-
-    free(Vt);
-    free(l);
-    free(minimum);
-
-    /* PARTE VECCHIA
-    // while V != Vt
-    while (!areAllTrue(Vt, dimension)) {
-
-        int closestWeigth = 999999999;
-        int closestIndex = tID;
-
-        
-
-        // Find the next vertex closest to source node
-        if (Vt[tID] != true) {
-
-            // in-place reduction
-            for (int stride = 1; stride < blockDim.x; stride *= 2) {
-                // convert tid into local array index
-                int index = 2 * stride * tID;
-                if (index < blockDim.x)
-                    min[index] = atomicMin(min[index], min[index + stride]);
-                // synchronize within threadblock
-                __syncthreads();
-            }
-
-            if (l[tID] < closestWeigth) {
-                closestWeigth = l[tID];
-                closestIndex = tID;
-            }
-        }
-        // Add closest vertex to Vt
-        Vt[closestIndex] = true;
-        __syncthreads();
-
-        // Recompute l
-        if (Vt[tID] != true) {
-            int uvWeight = matrix[closestIndex * dimension + tID];
-            l[tID] = min(l[tID], l[closestIndex] + uvWeight);
-        }
-        __syncthreads();
-    } */
 }
