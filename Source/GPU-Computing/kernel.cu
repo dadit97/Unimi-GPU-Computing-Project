@@ -184,7 +184,10 @@ __global__ void shortestPathsParallelV2(int* matrix, int dimension, int* results
             __syncthreads();
         }
 
+        if (bID == 0) printf("%d ", l[tID]);
+        if (bID == 0 && tID == bDim) printf("\n\n");
         __syncthreads();
+
     }
 
     results[bID * dimension + tID] = l[tID];

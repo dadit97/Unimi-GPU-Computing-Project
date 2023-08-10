@@ -14,13 +14,13 @@ int main(void) {
     //Kernel part
     cudaSetDevice(0);
 
-    int nodes = 4;
+    int nodes = 16;
     int* matrix = (int*)malloc(nodes * nodes * sizeof(int*));
     for (int i = 0; i < nodes; i++) {
         matrix[i] = 999999999;
     }
 
-    getBasicGraph(matrix);
+    generateRandomGraph(matrix, 16);
     printf("Initial matrix loaded\n");
 
     for (int i = 0; i < nodes; i++) {
@@ -144,6 +144,7 @@ int main(void) {
     }
 
     cudaFree(resultsMatrix);
+    cudaFree(gpu_matrix);
     printf("Kernel V2 execution time: %f milliseconds\n", duration.count());
 
     //SEQUENTIAL PART
