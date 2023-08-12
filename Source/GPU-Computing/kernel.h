@@ -12,4 +12,4 @@ __device__ extern int minWithoutZero(int a, int b);
 
 __global__ extern void shortestPathsParallel(int* matrix, int dimension, int* results);
 
-__global__ extern void shortestPathsParallelV2(int* matrix, int dimension, int* results);
+__global__ extern void shortestPathsParallelV2(int* matrix, int* results);

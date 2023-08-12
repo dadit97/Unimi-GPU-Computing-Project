@@ -14,21 +14,31 @@ int main(void) {
     //Kernel part
     cudaSetDevice(0);
 
-    int nodes = 16;
+    int device;
+    cudaGetDevice(&device);
+
+    struct cudaDeviceProp props;
+    cudaGetDeviceProperties(&props, device);
+
+    printf("Max Threads per Block:%d\n", props.maxThreadsPerBlock);
+    printf("Max Blocks per Multiprocessor:%d\n", props.maxBlocksPerMultiProcessor);
+    printf("Max Shared Memory size per Block:%d\n", props.sharedMemPerBlock);
+
+    int nodes = 100;
     int* matrix = (int*)malloc(nodes * nodes * sizeof(int*));
     for (int i = 0; i < nodes; i++) {
         matrix[i] = 999999999;
     }
 
-    generateRandomGraph(matrix, 16);
+    generateRandomGraph(matrix, nodes);
     printf("Initial matrix loaded\n");
 
-    for (int i = 0; i < nodes; i++) {
+    /*for (int i = 0; i < nodes; i++) {
         for (int j = 0; j < nodes; j++) {
             printf("%d ", matrix[i * nodes + j]);
         }
         printf("\n");
-    }
+    }*/
 
     /*int index = 0;
     for (int i = 0; i < nodes; i++) {
@@ -94,12 +104,12 @@ int main(void) {
     }
     printf("Results copy on Host completed\n");
 
-    for (int i = 0; i < nodes; i++) {
+    /*for (int i = 0; i < nodes; i++) {
         for (int j = 0; j < nodes; j++) {
             printf("%d ", results[i * nodes + j]);
         }
         printf("\n");
-    }
+    }*/
 
     printf("Kernel execution time: %f milliseconds\n", duration.count());
 
@@ -108,7 +118,7 @@ int main(void) {
     printf("\n\nKERNEL V2 PART\n\n");
 
     before = clock::now();
-    shortestPathsParallelV2 <<<nodes, nodes, sizeof(int) * nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes + sizeof(bool) >> > (gpu_matrix, nodes, resultsMatrix);
+    shortestPathsParallelV2 <<<nodes, nodes, sizeof(int) * nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes + sizeof(bool) >> > (gpu_matrix, resultsMatrix);
     cudaError = cudaGetLastError();
 
     if (cudaError != cudaSuccess) {
@@ -136,12 +146,12 @@ int main(void) {
     }
     printf("Results copy on Host completed\n");
 
-    for (int i = 0; i < nodes; i++) {
+    /*for (int i = 0; i < nodes; i++) {
         for (int j = 0; j < nodes; j++) {
             printf("%d ", results[i * nodes + j]);
         }
         printf("\n");
-    }
+    }*/
 
     cudaFree(resultsMatrix);
     cudaFree(gpu_matrix);
@@ -161,12 +171,12 @@ int main(void) {
     duration = clock::now() - before;
 
     printf("Sequential algorithm completed\n");
-    for (int i = 0; i < nodes; i++) {
+    /*for (int i = 0; i < nodes; i++) {
         for (int j = 0; j < nodes; j++) {
             printf("%d ", results[i * nodes + j]);
         }
         printf("\n");
-    }
+    }*/
 
     printf("Sequential execution time: %f milliseconds\n", duration.count());
     free(results);

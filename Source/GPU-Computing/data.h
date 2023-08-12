@@ -8,5 +8,7 @@ extern void generateRandomGraph(int* matrix, int dimension);
 
 extern void getBasicGraph(int* matrix);
 
+extern void getBasicGraphV2(int* matrix);
+
 //Not used, replaced by random generation
 extern void getDataFromFile(int* matrix, int dimension, char* path);
