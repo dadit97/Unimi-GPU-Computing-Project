@@ -130,6 +130,7 @@ __global__ void shortestPathsParallelV2(int* matrix, int* results) {
 
     int whileCounter = 0;
     int forCounter = 0;
+    
 
     while (true) {
 
@@ -244,6 +245,6 @@ __global__ void shortestPathsParallelV2(int* matrix, int* results) {
         __syncthreads();
 
     }
-    //if (bID == 3) printf("%d ", l[tID]);
+    //if (bID == 10) printf("%d ", l[tID]);
     results[bID * bDim + tID] = l[tID];
 }
