@@ -2,9 +2,9 @@
   
   D:\Progetti\GPU-Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.1\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.35.32215\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.1\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.1\include"  -G   --keep-dir x64\Debug  -maxrregcount=0   --machine 64 --compile -cudart static  -g  -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -Xcompiler "/Fdx64\Debug\vc143.pdb" -o D:\Progetti\GPU-Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\x64\Debug\main.cu.obj "D:\Progetti\GPU-Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\main.cu" 
   main.cu
-  tmpxft_00003788_00000000-7_main.cudafe1.cpp
-D:\Progetti\GPU-Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\main.cu(25): warning C4477: 'printf': con la stringa di formato '%d' è necessario un argomento di tipo 'int', ma il tipo dell'argomento variadic 1 è 'size_t'
-  D:\Progetti\GPU-Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\main.cu(25): note: provare a usare '%zd' nella stringa di formato
-D:\Progetti\GPU-Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\main.cu(33): warning C4477: 'printf': con la stringa di formato '%d' è necessario un argomento di tipo 'int', ma il tipo dell'argomento variadic 1 è 'size_t'
-  D:\Progetti\GPU-Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\main.cu(33): note: provare a usare '%zd' nella stringa di formato
+  tmpxft_00000580_00000000-7_main.cudafe1.cpp
+D:\Progetti\GPU-Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\main.cu(24): warning C4477: 'printf': con la stringa di formato '%d' è necessario un argomento di tipo 'int', ma il tipo dell'argomento variadic 1 è 'size_t'
+  D:\Progetti\GPU-Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\main.cu(24): note: provare a usare '%zd' nella stringa di formato
+D:\Progetti\GPU-Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\main.cu(32): warning C4477: 'printf': con la stringa di formato '%d' è necessario un argomento di tipo 'int', ma il tipo dell'argomento variadic 1 è 'size_t'
+  D:\Progetti\GPU-Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\main.cu(32): note: provare a usare '%zd' nella stringa di formato
   GPU-Computing.vcxproj -> D:\Progetti\GPU-Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\x64\Debug\GPU-Computing.exe

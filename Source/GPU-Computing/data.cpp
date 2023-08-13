@@ -1,18 +1,21 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include <list>
 #include <vector>
 
 using namespace std;
 
 int getRandomWeight() {
-    std::vector<int> list{ 1, 2, 3, 4, 5, 999999999 };
+    std::vector<int> list{ 1, 2, 3, 4, 5, 9 };
     int index = rand() % list.size();
     return list[index];
 }
 
 void generateRandomGraph(int* matrix, int dimension) {
+    srand(time(NULL));
+    rand();
     int weight = 0;
     for (int i = 0; i < dimension; i++) {
         for (int j = 0; j < dimension; j++) {
