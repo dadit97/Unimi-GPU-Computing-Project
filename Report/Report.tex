@@ -17,7 +17,7 @@
 %	REPORT INFORMATION
 %----------------------------------------------------------------------------------------
 
-\title{GPU Computing\\Parallel implementation of Dijkstra's Algorithm} % Report title
+\title{GPU Computing Project\\Parallel implementation of Dijkstra's Algorithm} % Report title
 
 \author{Tricella Davide 08361A} % Author name(s), add additional authors like: '\& James \textsc{Smith}'
 
@@ -40,7 +40,7 @@
 %----------------------------------------------------------------------------------------
 
 \begin{abstract}
-    The purpose of this paper is to describe the implementation and benchmarking of various parallel implementations of Dijkstra's Algorithm to solve the shortest path problem.
+    The purpose of this paper is to describe the implementation and benchmarking of various parallel implementations of Dijkstra's Algorithm to solve the all-pairs shortest path problem.
 \end{abstract}
 
 %----------------------------------------------------------------------------------------
@@ -70,7 +70,7 @@ The algorithm assumes that there are not negative weights and that the graph is 
 
 This problem is tackled in a lot of practical applications, like road networks path-finding, telecommunication routing and robot navigation.
 
-\section{Dijkstra’s algorithm}
+\section{Dijkstra’s algorithm overview}
 To solve the problem introduced before, there are several solutions which have been studied and improved troughout the years.
 The option chosen for this task has been the Dijkstra’s algorithm, which has been implemented using the paper \cite{paper}
 as a guidance.\\
@@ -89,7 +89,7 @@ The main elements used during the computation are:\\
 \begin{itemize}
     \item Graph Adiacency Matrix: which represents the graph indicating the weight of the edge which connects a node to another
     \item Vt Set: used as a stop condition and to check if a node has already a minimal path assigned
-    \item l Array: which contains the minimal path found for a certain node at a certain moment\\
+    \item l Array: which contains the minimal paths found for a certain node at a certain moment\\
 \end{itemize}
 
 We can divide the procedure into two main passages:\\
@@ -114,6 +114,7 @@ where all the shortest paths are stored.\\
 
 To solve the all pairs Shortest Paths problem we add an external loop that launch the algoritmh for every row of the original Adiacency Matrix,
 and at the end returns a new matrix, composed of the various l arrays computed for every node.
+
 \subsection{Basic parallel version}
 The idea behind the initially implemented parallel version is simple:
 to solve the problem we have to launch the algorithm |V| times, where V is the set of nodes of the graph.
@@ -129,14 +130,33 @@ The main problem is that it is not taking full advantage of the Gpu capabilities
 
 \subsection{Improved parallel version}
 This version aim to exploit more the parallel execution of the GPU, using one Block per node of the graph, and one thread for every node to evaluate in the block.
+To reach this objective it is necessary to use the shared memory to save the varius data used during the computation of a block.\\
+
+This time the threads are not isolated and need to cooperate to compute the final array for the block result.
+The inner for loop now implement a Parallel reduction procedure which compute the local minimum of a node.\\
+
+There are some critical section of the code, like the stop condition check, that have been assigned exclusively to the first thread of the block,
+using the thread syncronization directive, because these steps are not easy to parallelize, and the istruction executed by multiple threads could
+cause concurrent acces which would slow down the evaluation.\\
+
 
 
 \section{Implementation details}
 
+\subsection{Sequential version}
+
+\subsection{Basic parallel version}
+
+\subsection{Improved parallel version}
+
 
 \section{Benchmarking}
 
-\subsection{Sequential vs Parallel}
+\subsection{Time usage}
+
+\subsection{Memory usage}
+
+\subsection{Profiling}
 
 \newpage
 \printbibliography % Output the bibliography

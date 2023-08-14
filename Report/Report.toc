@@ -1,8 +1,13 @@
 \contentsline {section}{\numberline {1}Introduction}{2}{}%
-\contentsline {section}{\numberline {2}Dijkstra’s algorithm}{2}{}%
+\contentsline {section}{\numberline {2}Dijkstra’s algorithm overview}{2}{}%
 \contentsline {subsection}{\numberline {2.1}Sequential Version}{3}{}%
 \contentsline {subsection}{\numberline {2.2}Basic parallel version}{4}{}%
 \contentsline {subsection}{\numberline {2.3}Improved parallel version}{4}{}%
-\contentsline {section}{\numberline {3}Implementation details}{4}{}%
-\contentsline {section}{\numberline {4}Benchmarking}{4}{}%
-\contentsline {subsection}{\numberline {4.1}Sequential vs Parallel}{4}{}%
+\contentsline {section}{\numberline {3}Implementation details}{5}{}%
+\contentsline {subsection}{\numberline {3.1}Sequential version}{5}{}%
+\contentsline {subsection}{\numberline {3.2}Basic parallel version}{5}{}%
+\contentsline {subsection}{\numberline {3.3}Improved parallel version}{5}{}%
+\contentsline {section}{\numberline {4}Benchmarking}{5}{}%
+\contentsline {subsection}{\numberline {4.1}Time usage}{5}{}%
+\contentsline {subsection}{\numberline {4.2}Memory usage}{5}{}%
+\contentsline {subsection}{\numberline {4.3}Profiling}{5}{}%

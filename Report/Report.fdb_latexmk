@@ -1,12 +1,12 @@
 # Fdb version 4
-["biber Report"] 1692007993 "Report.bcf" "Report.bbl" "Report" 1692030639 0
+["biber Report"] 0 "Report.bcf" "Report.bbl" "Report" 1692050772 -1
   "./bibliography.bib" 1684182541 196 f11ae270fbbf723d241a042c6d65f7da ""
-  "Report.bcf" 1692030639 107673 143f387c050024d9041d098ec2165dc1 "pdflatex"
+  "Report.bcf" 1692050771 107673 143f387c050024d9041d098ec2165dc1 "pdflatex"
   (generated)
   "Report.bbl"
   "Report.blg"
   (rewritten before read)
-["pdflatex"] 1692030636 "d:/Progetti/GPU-Computing/Unimi-GPU-Computing-Project/Report/Report.tex" "Report.pdf" "Report" 1692030639 0
+["pdflatex"] 1692050769 "d:/Progetti/GPU-Computing/Unimi-GPU-Computing-Project/Report/Report.tex" "Report.pdf" "Report" 1692050772 0
   "C:/Users/dadit/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1684700845 180843 3c987899d849bec430fa81c4beec8f76 ""
   "C:/Users/dadit/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/ectt1200.pk" 1684182566 24152 cca9318f9e0238ea7a7a79dfef5a1f17 ""
   "C:/Users/dadit/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1684083181 23178960 97b73ea55b27b7608172578cfdb021b1 ""
@@ -135,13 +135,13 @@
   "C:/Users/dadit/AppData/Local/Programs/MiKTeX/tex/latex/xkeyval/xkeyval.sty" 1656236919 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
   "C:/Users/dadit/AppData/Local/Programs/MiKTeX/tex/latex/xstring/xstring.sty" 1673965817 123 a302f2c651a95033260db60e51527ae8 ""
   "Figures//../images/graph.png" 1684094396 69794 48c390bcc61fa3f7685a33a028e3f1fb ""
-  "Report.aux" 1692030639 1268 3aecb96ad9f301758904ec8434353c60 "pdflatex"
+  "Report.aux" 1692050771 1816 e7562091ac71a736c3b59f815115d8bf "pdflatex"
   "Report.bbl" 1692008030 1711 450c0a82dc793ce3cf63dfad431e1519 "biber Report"
-  "Report.run.xml" 1692030639 2321 82095be7a221b7052ef336218ba16456 "pdflatex"
-  "Report.tex" 1692030632 7301 9cd8a06eeb006634122d3538515588f4 ""
-  "Report.toc" 1692030639 551 9993bcf7ce16d43dddcfc24c7547ea09 "pdflatex"
+  "Report.run.xml" 1692050771 2321 82095be7a221b7052ef336218ba16456 "pdflatex"
+  "Report.tex" 1692050765 8207 679b495563b93adc56722d9a57b28263 ""
+  "Report.toc" 1692050771 894 fa5970a331975e04b519d5f5574aa47e "pdflatex"
   "class.cls" 1684083873 3246 5121683264dd10acf8f91b396aee5f17 ""
-  "d:/Progetti/GPU-Computing/Unimi-GPU-Computing-Project/Report/Report.tex" 1692030632 7301 9cd8a06eeb006634122d3538515588f4 ""
+  "d:/Progetti/GPU-Computing/Unimi-GPU-Computing-Project/Report/Report.tex" 1692050765 8207 679b495563b93adc56722d9a57b28263 ""
   "use Figures//../images/graph.png" 1684094396 69794 48c390bcc61fa3f7685a33a028e3f1fb ""
   (generated)
   "Report.aux"
