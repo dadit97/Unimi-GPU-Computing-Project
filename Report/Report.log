@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.5.14)  15 MAY 2023 22:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 23.4) (preloaded format=pdflatex 2023.5.14)  14 AUG 2023 18:30
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -869,19 +869,19 @@ LaTeX Font Info:    Font shape `T1/XCharter-TLF/b/n' will be
 \tf@toc=\write4
 \openout4 = `Report.toc'.
 
+ [1
 
+{C:/Users/dadit/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch_rydp4l.enc}{C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch_yelf2i.enc}]
 Underfull \hbox (badness 10000) in paragraph at lines 58--60
 
  []
 
-<Figures//../images/graph.png, id=1, 451.6875pt x 297.11pt>
+<Figures//../images/graph.png, id=8, 451.6875pt x 297.11pt>
 File: Figures//../images/graph.png Graphic file (type png)
 <use Figures//../images/graph.png>
 Package pdftex.def Info: Figures//../images/graph.png  used on input line 62.
 (pdftex.def)             Requested size: 284.52756pt x 187.16669pt.
-[1
 
-{C:/Users/dadit/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch_rydp4l.enc}{C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch_yelf2i.enc}]
 Underfull \hbox (badness 10000) in paragraph at lines 66--68
 
  []
@@ -892,34 +892,97 @@ Underfull \hbox (badness 10000) in paragraph at lines 69--70
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 74--76
+Underfull \hbox (badness 10000) in paragraph at lines 74--77
 
  []
 
+[2 <./Figures//../images/graph.png>]
 LaTeX Font Info:    Font shape `T1/XCharter-TLF/b/n' will be
-(Font)              scaled to size 13.82408pt on input line 79.
+(Font)              scaled to size 13.82408pt on input line 84.
+
+Underfull \hbox (badness 10000) in paragraph at lines 85--87
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 88--90
+
+ []
+
+LaTeX Font Info:    Trying to load font information for TS1+XCharter-TLF on input line 90.
+(C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/xcharter\ts1xcharter-tlf.fd
+File: TS1XCharter-TLF.fd 2020/05/25 (msharpe) Font definitions for TS1/XCharter-TLF.
+)
+LaTeX Font Info:    Font shape `TS1/XCharter-TLF/m/n' will be
+(Font)              scaled to size 11.52008pt on input line 90.
+
+Underfull \hbox (badness 10000) in paragraph at lines 92--93
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 95--97
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 98--99
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 101--103
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 104--106
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 107--110
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 112--114
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 118--122
+
+ []
+
+[3{C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch1_co4ru4.enc}]
+Underfull \hbox (badness 10000) in paragraph at lines 123--125
+
+ []
+
+[4]
 LaTeX Font Info:    Font shape `T1/XCharter-TLF/m/it' will be
-(Font)              scaled to size 11.52008pt on input line 94.
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 94.
-(C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/base\t1cmtt.fd
+(Font)              scaled to size 11.52008pt on input line 142.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 142.
+ (C:\Users\dadit\AppData\Local\Programs\MiKTeX\tex/latex/base\t1cmtt.fd
 File: t1cmtt.fd 2022/07/10 v2.5l Standard LaTeX font definitions
-) [2 <./Figures//../images/graph.png>] [3] (Report.aux)
+) [5] (Report.aux)
 Package logreq Info: Writing requests to 'Report.run.xml'.
 \openout1 = `Report.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 21145 strings out of 476331
- 428928 string characters out of 5787765
- 1857660 words of memory out of 5000000
- 41325 multiletter control sequences out of 15000+600000
- 614183 words of font info for 105 fonts, out of 8000000 for 9000
+ 21174 strings out of 476331
+ 429709 string characters out of 5787765
+ 1860660 words of memory out of 5000000
+ 41348 multiletter control sequences out of 15000+600000
+ 614906 words of font info for 107 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 88i,6n,117p,740b,1430s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 88i,6n,117p,740b,1432s stack positions out of 10000i,1000n,20000p,200000b,200000s
  <C:\Users\dadit\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1200.pk><C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/type1/public/xcharter/XCharter-Bold.pfb><C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/type1/public/xcharter/XCharter-Italic.pfb><C:/Users/dadit/AppData/Local/Programs/MiKTeX/fonts/type1/public/xcharter/XCharter-Roman.pfb>
-Output written on Report.pdf (3 pages, 229018 bytes).
+Output written on Report.pdf (5 pages, 234988 bytes).
 PDF statistics:
- 66 PDF objects out of 1000 (max. 8388607)
+ 76 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

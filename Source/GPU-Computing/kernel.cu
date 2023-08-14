@@ -134,11 +134,11 @@ __global__ void shortestPathsParallelV2(int* matrix, int* results) {
     while (true) {
 
         whileCounter++;
-        __syncthreads();
+        /*__syncthreads();
         if (bID == 0) {
             printf("%d", Vt[tID]);
             if (tID == bDim - 1) printf("\n\n");
-        }
+        }*/
 
         if (tID == 0) {
             stopCycle[0] = areAllTrue(Vt, bDim);

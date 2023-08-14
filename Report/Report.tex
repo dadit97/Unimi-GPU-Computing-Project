@@ -48,7 +48,7 @@
 %----------------------------------------------------------------------------------------
 
 \tableofcontents
-
+\newpage
 %----------------------------------------------------------------------------------------
 %	INTRODUCTION
 %----------------------------------------------------------------------------------------
@@ -71,26 +71,74 @@ The algorithm assumes that there are not negative weights and that the graph is 
 This problem is tackled in a lot of practical applications, like road networks path-finding, telecommunication routing and robot navigation.
 
 \section{Dijkstra’s algorithm}
-To solve the problem introduced before, it was decided to implement the Dijkstra’s algorithm, using the paper \cite{paper}
+To solve the problem introduced before, there are several solutions which have been studied and improved troughout the years.
+The option chosen for this task has been the Dijkstra’s algorithm, which has been implemented using the paper \cite{paper}
 as a guidance.\\
+
+This is a very well known algorithm, initially designed at the end of the 1950's, and used in a huge number of different applications.
 
 The first version implemented was basically a parallel extension of the sequential algorithm,
 then a more advanced approach has been taken for the improved version.
+
+\newpage
 \subsection{Sequential Version}
+The basic algorithm solve the problem of shortest path between one Source Node and all the other nodes. The sequential version uses a for loop
+to launch this version on every node of the graph, so at the end of the loop every node possesses the shortest path to every other node.\\
 
+The main elements used during the computation are:\\
+\begin{itemize}
+    \item Graph Adiacency Matrix: which represents the graph indicating the weight of the edge which connects a node to another
+    \item Vt Set: used as a stop condition and to check if a node has already a minimal path assigned
+    \item l Array: which contains the minimal path found for a certain node at a certain moment\\
+\end{itemize}
 
+We can divide the procedure into two main passages:\\
+\begin{itemize}
+    \item Initialization
+    \item Main loop\\
+\end{itemize}
+
+During the first phase the Vt set is created containing only the Source Node, then the l Array is initialized, with the direct connections
+from the Source Node to every other node, putting a symblic value of "infinity" where a direct connection is not available.\\
+
+The the main loop begins, and continues until all the nodes are present in the Vt set. The Main cycle, is composed of two internal phases:\\
+\begin{itemize}
+    \item Local minimum search: between the elements of l not included in Vt we look for the minimum weight. Then we add the node selected to Vt.
+    \item Update loop: the value of l corresponding to the node selected before gets updated with the minimum between the current value and the sum
+    between the value selected during the minimum search and the weight present in the matrix. This part verifies if the value calculated by the search
+    brings to a path actually shorter than the one stored.\\
+\end{itemize}
+
+When the Vt set is equal to the set of nodes of the graph, the Main loop terminates and the algorithm returns the l Array, 
+where all the shortest paths are stored.\\
+
+To solve the all pairs Shortest Paths problem we add an external loop that launch the algoritmh for every row of the original Adiacency Matrix,
+and at the end returns a new matrix, composed of the various l arrays computed for every node.
 \subsection{Basic parallel version}
+The idea behind the initially implemented parallel version is simple:
+to solve the problem we have to launch the algorithm |V| times, where V is the set of nodes of the graph.
+Using only one block of the GPU, every thread executes the algorithm for one node of the graph, and at the end insert the results in the correct
+row of the matrix in Global Memory.\\
+
+The shared memory is not used because the variables needed for the computation are all locally present inside the thread, which is the main advantage of
+this first technique, because there are not requirements of any kind on inter-process communications. Each thread works completely isolated from the others.\\
+
+This implementation requires a thread per node of the graph, which still uses the various for loops present in the sequential version,
+this fact make this implementation simple to program, with a decent speedup, provided the graph is big enough.\\
+The main problem is that it is not taking full advantage of the Gpu capabilities, which is the weak spot that the second version tries to address. 
 
 \subsection{Improved parallel version}
+This version aim to exploit more the parallel execution of the GPU, using one Block per node of the graph, and one thread for every node to evaluate in the block.
+
 
 \section{Implementation details}
 
-\subsection{Data structures}
 
 \section{Benchmarking}
 
 \subsection{Sequential vs Parallel}
 
+\newpage
 \printbibliography % Output the bibliography
 
 %----------------------------------------------------------------------------------------

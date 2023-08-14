@@ -23,7 +23,7 @@ int main(void) {
     printf("Max Blocks per Multiprocessor:%d\n", props.maxBlocksPerMultiProcessor);
     printf("Max Shared Memory size per Block:%d\n", props.sharedMemPerBlock);
 
-    int nodes = 512;
+    int nodes = 64;
     int* matrix = (int*)malloc(nodes * nodes * sizeof(int*));
     for (int i = 0; i < nodes; i++) {
         matrix[i] = 9;
