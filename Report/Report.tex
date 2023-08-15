@@ -59,7 +59,7 @@ The problem of shortest path in a graph consists in finding the path, from node 
 which minimizes the sum of edges weights of which the path is composed.\\
 
 \begin{center}
-    \includegraphics[width=10cm]{../images/graph.png}
+    \includegraphics[width=10cm]{/images/graph.png}
     \captionof{figure}{Graph with edge weights}
 \end{center}
 
@@ -104,7 +104,7 @@ from the Source Node to every other node, putting a symblic value of "infinity" 
 The the main loop begins, and continues until all the nodes are present in the Vt set. The Main cycle, is composed of two internal phases:\\
 \begin{itemize}
     \item Local minimum search: between the elements of l not included in Vt we look for the minimum weight. Then we add the node selected to Vt.
-    \item Update loop: the value of l corresponding to the node selected before gets updated with the minimum between the current value and the sum
+    \item Update loop: the value of l, corresponding to the node selected before, gets updated with the minimum between the current value and the sum
     between the value selected during the minimum search and the weight present in the matrix. This part verifies if the value calculated by the search
     brings to a path actually shorter than the one stored.\\
 \end{itemize}
@@ -112,8 +112,17 @@ The the main loop begins, and continues until all the nodes are present in the V
 When the Vt set is equal to the set of nodes of the graph, the Main loop terminates and the algorithm returns the l Array, 
 where all the shortest paths are stored.\\
 
-To solve the all pairs Shortest Paths problem we add an external loop that launch the algoritmh for every row of the original Adiacency Matrix,
+To solve the all pairs Shortest Paths problem we add an external loop that launch the algorithm for every row of the original Adiacency Matrix,
 and at the end returns a new matrix, composed of the various l arrays computed for every node.
+
+\subsubsection{Complexity}
+The sequential algorithm perform $n$ times the basic algorithm , which has a complexity of O($n^2$):\\
+
+\begin{itemize}
+    \item Time per Source: $O(n^2)$
+    \item Number of executions: $n$
+    \item Total Time: $O(n^3)$\\
+\end{itemize}
 
 \subsection{Basic parallel version}
 The idea behind the initially implemented parallel version is simple:
@@ -126,7 +135,15 @@ this first technique, because there are not requirements of any kind on inter-pr
 
 This implementation requires a thread per node of the graph, which still uses the various for loops present in the sequential version,
 this fact make this implementation simple to program, with a decent speedup, provided the graph is big enough.\\
-The main problem is that it is not taking full advantage of the Gpu capabilities, which is the weak spot that the second version tries to address. 
+The main problem is that it is not taking full advantage of the Gpu capabilities, which is the weak spot that the second version tries to address.
+
+\subsubsection{Complexity}
+This version improves the performance by performing the basic algorithm in parallel, and has no communication delay:\\
+\begin{itemize}
+    \item Time per Source: $O(n^2)$
+    \item Number of executions: $1$
+    \item Total Time: $O(n^2)$\\
+\end{itemize}
 
 \subsection{Improved parallel version}
 This version aim to exploit more the parallel execution of the GPU, using one Block per node of the graph, and one thread for every node to evaluate in the block.
@@ -136,19 +153,144 @@ This time the threads are not isolated and need to cooperate to compute the fina
 The inner for loop now implement a Parallel reduction procedure which compute the local minimum of a node.\\
 
 There are some critical section of the code, like the stop condition check, that have been assigned exclusively to the first thread of the block,
-using the thread syncronization directive, because these steps are not easy to parallelize, and the istruction executed by multiple threads could
-cause concurrent acces which would slow down the evaluation.\\
+using the thread syncronization directive, because these steps are complex to parallelize, and the istruction executed by multiple threads could
+cause concurrent acces which would slow down the evaluation.
 
+\subsubsection{Complexity}
+The improved version increases the concurrency by using $n$ processor per instance, so $n^2$ processors, this means thath every instance is executed
+by n processors, but we have to take into account the communication delay:\\
+\begin{itemize}
+    \item Time per Source: $O(n2/p + nlog(p))$
+    \item Number of processors: $n$
+    \item Total Time: $O(n^3 / n) + O(nlog(p)) = O(n^2) + O(nlog(p))$\\
+\end{itemize}
 
-
+\newpage
 \section{Implementation details}
 
 \subsection{Sequential version}
+The sequential version is implemented by the function
+
+\begin{verbatim}
+    void shortestPathsSequential(int* matrix, int dimension, int* results)
+\end{verbatim}
+
+where matrix and results are respectively the Adiacency Matrix of the graph and the result matrix, while dimension is the number
+of nodes of the graph.\\
+
+Then the data structures for the computation are allocated and initialized, with Vt having all false values except for the Source node
+and l having the values of the corresponding matrix row.
+\begin{verbatim}
+    bool* Vt = (bool*)malloc((dimension) * sizeof(bool));
+    int* l = (int*)malloc(dimension * sizeof(int));
+\end{verbatim}
+
+The main loop start, using a simple function which check the Vt array as a stop condition
+\begin{verbatim}
+bool allTrue(bool* vector, int dimension)
+\end{verbatim}
+
+The search for the local minimum is executed.
+\begin{verbatim}
+for (int i = 0; i < dimension; i++) {
+    if (Vt[i] == true) continue;
+    if (l[i] < closestWeigth) {
+        closestWeigth = l[i];
+        closestIndex = i;
+    }
+}
+\end{verbatim}
+
+Then the Vt cell of the closest node is set to true and the l array is updated with the minimum between the the current vslue and the
+possible better value.
+\begin{verbatim}
+Vt[closestIndex] = true;
+for (int i = 0; i < dimension; i++) {
+    if (Vt[i] == true) continue;
+    int uvWeight = matrix[closestIndex * dimension + i];
+    l[i] = min(l[i], l[closestIndex] + uvWeight);
+}
+\end{verbatim}
+
+When the main loop stops, the result matrix is filled with the values from the l array
+\begin{verbatim}
+for (int i = 0; i < dimension; i++) {
+    results[node * dimension + i] = l[i];
+}
+\end{verbatim}
 
 \subsection{Basic parallel version}
+This simple parallel version is implemented by the function
+\begin{verbatim}
+__global__ void shortestPathsParallel(int* matrix, int dimension, int* results)
+\end{verbatim}
+
+The algorithm is not substantially different from the sequential version, the only change present is that now the reference for the
+Source node is not the index of a for loop, but the thread Id.\\
+
+Every thread of the sigle block used computes the sequential version without communicating in any way with other threads, not even during
+the results copying section.
+
+This means that during initialization the Vt index to set is the one corresponding to the tID variable. This id is also used during the
+update of the l array and the filling of the results matrix.\\
 
 \subsection{Improved parallel version}
+The last version is implemented by the function
+\begin{verbatim}
+__global__ void shortestPathsParallelV2(int* matrix, int* results)
+\end{verbatim}
 
+This time the code has various significant differences from the sequential one.\\
+
+Beginning from the initialization phase, the usage of multiple blocks required the utilization of the shared memory, to guarantee to all threads of the block
+the necessary information with good access speed.
+\begin{verbatim}
+extern __shared__ int s[];
+int* sharedData = s;
+
+// l vector initialization
+int* l = (int*)&sharedData[0];
+
+// minimum vector initialization, first half are values second half are indexes
+int* minimum = (int*)&l[bDim];
+
+// Boolean vector simulating the Vt set initialization
+bool* Vt = (bool*)&minimum[bDim * 2];
+
+bool* stopCycle = (bool*)&Vt[bDim];
+\end{verbatim}
+
+The shared memory initialization contains an additional vector, the minimum array, used during the computation of the local minimum, a notable thing about it
+is the fact that it is conceptually divided in two halves, the frist half containing the weight of a certain node, the second half containing the index of that node
+according to the original matrix.\\
+
+This is necessary for the correct computation of the parallel reduction, because the standard reduction does not take into account an external index, which is necessary
+in this application, so there are two assignments instead of one, one for the value, the other for the index.
+
+\begin{center}
+    \includegraphics[width=10cm]{/images/parallelReduction.png}
+    \captionof{figure}{Parallel reduction scheme}
+\end{center}
+\begin{verbatim}
+int localMin = minWithVt(
+    minimum[index],
+    minimum[index + stride],
+    Vt[minimum[index + bDim]],
+    Vt[minimum[index + stride + bDim]]
+);
+int localMinIndex = minIndexWithVt(
+    minimum[index],
+    localMin,
+    minimum[index + bDim],
+    minimum[index + stride + bDim],
+    Vt[minimum[index + bDim]],
+    Vt[minimum[index + stride + bDim]]
+);
+\end{verbatim}
+The two functions above are responsible for finding the minimum and the minimum index, taking the corresponding Vt values into account.
+This part of the implementation has been particularly tricky, with the algorithm not converging to a solution, due to set errors of the new Vt value.\\
+
+At the end of the parallel reduction section there will be the value and the index of the minimum edge respectiverly at minimum[0] and minimum[blockDimension].
 
 \section{Benchmarking}
 

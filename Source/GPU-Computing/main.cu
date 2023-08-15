@@ -10,8 +10,7 @@
 using namespace std;
 
 int main(void) {
-
-    //Kernel part
+    
     cudaSetDevice(0);
 
     int device;

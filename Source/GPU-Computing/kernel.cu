@@ -95,8 +95,6 @@ __global__ void shortestPathsParallel(int* matrix, int dimension, int* results) 
 
 __global__ void shortestPathsParallelV2(int* matrix, int* results) {
     // Each Block computes the problem for the node with its blockID index
-    // Max threads per block = 1024
-    // Numero di thread per blocco = min(1024/numero nodi, nodi di una riga)
     int tID = threadIdx.x;
     int bID = blockIdx.x;
     int bDim = blockDim.x;
