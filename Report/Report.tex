@@ -292,6 +292,8 @@ This part of the implementation has been particularly tricky, with the algorithm
 
 At the end of the parallel reduction section there will be the value and the index of the minimum edge respectiverly at minimum[0] and minimum[blockDimension].
 
+The update of the l array is executed in the same way as before, with every thread updating its cell of the array.
+
 \section{Benchmarking}
 
 \subsection{Time usage}

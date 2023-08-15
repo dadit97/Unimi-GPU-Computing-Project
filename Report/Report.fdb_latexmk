@@ -1,14 +1,14 @@
 # Fdb version 3
-["biber Report"] 1692085652 "Report.bcf" "Report.bbl" "Report" 1692102992
-  "Report.bcf" 1692102991 107161 c4bb661998a33633fb330cdb7b74df31 "pdflatex"
+["biber Report"] 1692085652 "Report.bcf" "Report.bbl" "Report" 1692118978
+  "Report.bcf" 1692118978 107161 c4bb661998a33633fb330cdb7b74df31 "pdflatex"
   "bibliography.bib" 1692084732 190 f11ae270fbbf723d241a042c6d65f7da ""
   (generated)
   "Report.bbl"
   "Report.blg"
-["pdflatex"] 1692102990 "/home/davide/Documents/UNIMI/Unimi-GPU-Computing-Project/Report/Report.tex" "Report.pdf" "Report" 1692102992
+["pdflatex"] 1692118977 "/home/davide/Documents/UNIMI/Unimi-GPU-Computing-Project/Report/Report.tex" "Report.pdf" "Report" 1692118978
   "/etc/texmf/web2c/texmf.cnf" 1675602684 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/davide/.texlive2022/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1200.600pk" 1692085376 24132 8c8aee8e7c1c38d51c388f1e453cd0dd ""
-  "/home/davide/Documents/UNIMI/Unimi-GPU-Computing-Project/Report/Report.tex" 1692102990 13869 7cdcc166dd2ea01808adbf2f85871968 ""
+  "/home/davide/Documents/UNIMI/Unimi-GPU-Computing-Project/Report/Report.tex" 1692118976 13985 360095dd230ed2f39820da4f165a49eb ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/xcharter/xch1_co4ru4.enc" 1645915288 4020 60b792d80020bd18b20705eb9657af3d ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/xcharter/xch_rydp4l.enc" 1645915288 3163 21e525d33df21a14ca1957bee2a40288 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/xcharter/xch_ttjfqt.enc" 1645915288 3042 89ca0791973606a1e548c92a615cb3e0 ""
@@ -151,11 +151,11 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1658757727 39561 34c98e380bf7c7201ee6a7909aff625a ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1675604249 4290288 0979fa4ebf6a68fe13a9722b84923e79 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1685515954 1475469 5eb3d990bbddae200200347424e5e334 ""
-  "Report.aux" 1692102991 2276 9ed87216a9a48d9ec2cf2e57707dad23 "pdflatex"
+  "Report.aux" 1692118978 2276 9ed87216a9a48d9ec2cf2e57707dad23 "pdflatex"
   "Report.bbl" 1692085653 1659 450c0a82dc793ce3cf63dfad431e1519 "biber Report"
-  "Report.run.xml" 1692102991 2321 82095be7a221b7052ef336218ba16456 "pdflatex"
-  "Report.tex" 1692102990 13869 7cdcc166dd2ea01808adbf2f85871968 ""
-  "Report.toc" 1692102991 1095 69ff4c0f14dab8800d9d597bdcaaecfd "pdflatex"
+  "Report.run.xml" 1692118978 2321 82095be7a221b7052ef336218ba16456 "pdflatex"
+  "Report.tex" 1692118976 13985 360095dd230ed2f39820da4f165a49eb ""
+  "Report.toc" 1692118978 1095 69ff4c0f14dab8800d9d597bdcaaecfd "pdflatex"
   "class.cls" 1692084732 3167 5121683264dd10acf8f91b396aee5f17 ""
   (generated)
   "Report.aux"
