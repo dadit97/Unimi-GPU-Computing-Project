@@ -228,7 +228,7 @@ __global__ void shortestPathsParallel(int* matrix, int dimension, int* results)
 The algorithm is not substantially different from the sequential version, the only change present is that now the reference for the
 Source node is not the index of a for loop, but the thread Id.\\
 
-Every thread of the sigle block used computes the sequential version without communicating in any way with other threads, not even during
+Every thread of the single block used, computes the sequential version without communicating in any way with other threads, not even during
 the results copying section.
 
 This means that during initialization the Vt index to set is the one corresponding to the tID variable. This id is also used during the
@@ -266,6 +266,18 @@ according to the original matrix.\\
 
 This is necessary for the correct computation of the parallel reduction, because the standard reduction does not take into account an external index, which is necessary
 in this application, so there are two assignments instead of one, one for the value, the other for the index.
+
+\subsubsection{Parallel Reduction}
+The Parallel Reduction is a strategy to perform quickly some operations that ouptut a single value from the computing of an array of values.
+The idea is to maximize the usage of a parallel processor, by reducing the original array in smaller and smaller parts, with each thread evaluating two values per cycle.
+At the end of the operation the result will lay in the first cell of the array.\\
+
+This operation dows not require additional data structures to work, so it works competely in-place. The general field of application are mathematical operations such as sum or, in this case, a
+minimum operation.
+
+The standard algorithm of the reduction has been slighly modified to keep track of the node original index between the various passages. This comes with an additional
+cost, because now the number of comparisons that a thread must perform for every cycle is two instead of one.
+
 
 \begin{center}
     \includegraphics[width=10cm]{/images/parallelReduction.png}

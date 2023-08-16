@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=pdflatex 2023.5.31)  15 AUG 2023 19:02
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=pdflatex 2023.5.31)  16 AUG 2023 17:52
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -1025,19 +1025,23 @@ Underfull \hbox (badness 10000) in paragraph at lines 263--266
  []
 
 [7]
-<.///images/parallelReduction.png, id=37, 2998.20125pt x 2563.5775pt>
-File: .///images/parallelReduction.png Graphic file (type png)
-<use .///images/parallelReduction.png>
-Package pdftex.def Info: .///images/parallelReduction.png  used on input line 271.
-(pdftex.def)             Requested size: 284.52756pt x 243.26857pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 290--292
+Underfull \hbox (badness 10000) in paragraph at lines 271--274
 
  []
 
-[8 <.///images/parallelReduction.png>] [9]
+<.///images/parallelReduction.png, id=37, 2998.20125pt x 2563.5775pt>
+File: .///images/parallelReduction.png Graphic file (type png)
+<use .///images/parallelReduction.png>
+Package pdftex.def Info: .///images/parallelReduction.png  used on input line 283.
+(pdftex.def)             Requested size: 284.52756pt x 243.26857pt.
+[8 <.///images/parallelReduction.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 302--304
+
+ []
+
+[9]
 LaTeX Font Info:    Font shape `T1/XCharter-TLF/m/it' will be
-(Font)              scaled to size 11.52008pt on input line 306.
+(Font)              scaled to size 11.52008pt on input line 318.
  [10] (./Report.aux)
 Package logreq Info: Writing requests to 'Report.run.xml'.
 \openout1 = `Report.run.xml'.
@@ -1052,7 +1056,7 @@ Here is how much of TeX's memory you used:
  59 hyphenation exceptions out of 8191
  86i,6n,117p,743b,1422s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/xcharter/xch_rydp4l.enc} </home/davide/.texlive2022/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1200.600pk>{/usr/share/texlive/texmf-dist/fonts/enc/dvips/xcharter/xch_ttjfqt.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/xcharter/xch1_co4ru4.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/xcharter/xch_yelf2i.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/xcharter/XCharter-Bold.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/xcharter/XCharter-Italic.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/xcharter/XCharter-Roman.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/xcharter/XCharterMathMI.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/newtx/txmiaX.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/newtx/txsys.pfb>
-Output written on Report.pdf (10 pages, 366601 bytes).
+Output written on Report.pdf (10 pages, 367724 bytes).
 PDF statistics:
  147 PDF objects out of 1000 (max. 8388607)
  57 compressed objects within 1 object stream

@@ -10,6 +10,7 @@
 \contentsline {subsection}{\numberline {3.1}Sequential version}{6}{}%
 \contentsline {subsection}{\numberline {3.2}Basic parallel version}{7}{}%
 \contentsline {subsection}{\numberline {3.3}Improved parallel version}{7}{}%
+\contentsline {subsubsection}{\numberline {3.3.1}Parallel Reduction}{8}{}%
 \contentsline {section}{\numberline {4}Benchmarking}{9}{}%
 \contentsline {subsection}{\numberline {4.1}Time usage}{9}{}%
 \contentsline {subsection}{\numberline {4.2}Memory usage}{9}{}%
