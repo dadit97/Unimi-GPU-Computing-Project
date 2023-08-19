@@ -22,10 +22,10 @@ int main(void) {
     printf("Max Blocks per Multiprocessor:%d\n", props.maxBlocksPerMultiProcessor);
     printf("Max Shared Memory size per Block:%d\n", props.sharedMemPerBlock);
 
-    int nodes = 64;
+    int nodes = 128;
     int* matrix = (int*)malloc(nodes * nodes * sizeof(int*));
     for (int i = 0; i < nodes; i++) {
-        matrix[i] = 9;
+        matrix[i] = 999;
     }
 
     printf("Shared Memory size per Block:%d bytes\n", sizeof(int) * nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes + sizeof(bool));
@@ -37,14 +37,6 @@ int main(void) {
             printf("%d", matrix[i * nodes + j]);
         }
         printf("\n");
-    }*/
-
-    /*int index = 0;
-    for (int i = 0; i < nodes; i++) {
-        for (int j = 0; j < nodes; j++) {
-            matrix[index] = adj_matrix[i][j];
-            index++;
-        }
     }*/
 
     int* gpu_matrix;
@@ -103,13 +95,6 @@ int main(void) {
     }
     printf("Results copy on Host completed\n");
 
-    /*for (int i = 0; i < nodes; i++) {
-        for (int j = 0; j < nodes; j++) {
-            printf("%d", results[i * nodes + j]);
-        }
-        printf("\n");
-    }*/
-
     printf("Kernel execution time: %f milliseconds\n", duration.count());
 
     // KERNEL V2 PART
@@ -145,13 +130,6 @@ int main(void) {
     }
     printf("Results copy on Host completed\n");
 
-    /*for (int i = 0; i < nodes; i++) {
-        for (int j = 0; j < nodes; j++) {
-            printf("%d", results[i * nodes + j]);
-        }
-        printf("\n");
-    }*/
-
     cudaFree(resultsMatrix);
     cudaFree(gpu_matrix);
     printf("Kernel V2 execution time: %f milliseconds\n", duration.count());
@@ -168,14 +146,6 @@ int main(void) {
     before = clock::now();
     shortestPathsSequential(matrix, nodes, results);
     duration = clock::now() - before;
-
-    /*printf("Sequential algorithm completed\n");
-    for (int i = 0; i < nodes; i++) {
-        for (int j = 0; j < nodes; j++) {
-            printf("%d", results[i * nodes + j]);
-        }
-        printf("\n");
-    }*/
 
     printf("Sequential execution time: %f milliseconds\n", duration.count());
     free(results);
