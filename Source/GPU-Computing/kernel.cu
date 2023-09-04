@@ -186,9 +186,9 @@ __global__ void shortestPathsParallelV2(int* matrix, int* results) {
                     Vt[minimum[index + bDim]],
                     Vt[minimum[index + stride + bDim]]
                 );
-                if (index + stride >= bDim) printf("%d", index + stride);
+                //if (index + stride >= bDim) printf("%d", index + stride);
 
-                /*if (bID == 5 && tID == 0 && whileCounter == 31) {
+                if (bID == 0 && tID == 0 && whileCounter == 100) {
 
                     for (int i = 0; i < bDim; i++) {
                         printf("%d", Vt[i]);
@@ -207,7 +207,7 @@ __global__ void shortestPathsParallelV2(int* matrix, int* results) {
                         Vt[minimum[index + stride + bDim]]);
                     printf("%d %d %d %d\n\n", localMin, localMinIndex, index, stride);
                 }
-                __syncthreads();*/
+                __syncthreads();
                 minimum[index + bDim] = localMinIndex;
                 minimum[index] = localMin;
             }
@@ -219,7 +219,6 @@ __global__ void shortestPathsParallelV2(int* matrix, int* results) {
 
         // Add closest vertex to Vt
         if (tID == 0) {
-            if (Vt[minimum[bDim]] == true) printf("error");
             Vt[minimum[bDim]] = true;
         }
         __syncthreads();
