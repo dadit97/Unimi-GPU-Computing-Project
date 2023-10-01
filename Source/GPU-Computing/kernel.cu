@@ -126,12 +126,8 @@ __global__ void shortestPathsParallelV2(int* matrix, int* results) {
     l[tID] = matrix[bID * bDim + tID];
 
     __syncthreads();
-
-    int whileCounter = 0;
     
     while (true) {
-
-        whileCounter++;
 
         if (tID == 0) {
             stopCycle[0] = areAllTrue(Vt, bDim);
