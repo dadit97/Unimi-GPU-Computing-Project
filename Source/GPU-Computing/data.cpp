@@ -8,7 +8,7 @@
 using namespace std;
 
 int getRandomWeight() {
-    std::vector<int> list{ 1, 2, 3, 4, 5, 999 };
+    std::vector<int> list{ 1, 2, 3, 4, 5, 999999 };
     int index = rand() % list.size();
     return list[index];
 }

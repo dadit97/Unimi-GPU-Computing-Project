@@ -28,12 +28,6 @@ __device__ void initializeBoolVector(bool* vector, int dimension) {
     }
 }
 
-
-/*__device__ int minIndexWithVt(int value, int min, int nodeIndexA, int nodeIndexB, bool VtA, bool VtB) {
-    if (VtA && !VtB) return nodeIndexB;
-    if (VtB && !VtA) return nodeIndexA;
-    return value == min ? nodeIndexA : nodeIndexB;
-}*/
 __device__ int minIndexWithVt(int a, int b, int nodeIndexA, int nodeIndexB, bool VtA, bool VtB) {
     if (VtA && !VtB) return nodeIndexB;
     if (VtB && !VtA) return nodeIndexA;
@@ -113,10 +107,11 @@ __global__ void shortestPathsParallelV2(int* matrix, int* results) {
     int* l = (int*)&sharedData[0];
 
     // minimum vector initialization, first half are values second half are indexes
-    int* minimum = (int*)&l[bDim];
+    int* minimumValues = (int*)&l[bDim];
+    int* minimumIndexes = (int*)&minimumValues[bDim];
 
     // Boolean vector simulating the Vt set initialization
-    bool* Vt = (bool*)&minimum[bDim * 2];
+    bool* Vt = (bool*)&minimumIndexes[bDim];
 
     bool* stopCycle = (bool*)&Vt[bDim];
     
@@ -144,26 +139,13 @@ __global__ void shortestPathsParallelV2(int* matrix, int* results) {
         __syncthreads();
 
         if (stopCycle[0]) {
-            /*if (bID == 5 && tID == 0) {
-                for (int i = 0; i < bDim; i++) {
-                    printf("%d", Vt[i]);
-                }
-                printf(" %d-%d\n", minimum[0], minimum[bDim]);
-                for (int i = 0; i < bDim; i++) {
-                    printf("%d", l[i]);
-                }
-                printf(" %d\n\n", whileCounter);
-            }*/
             break;
         }
         __syncthreads();
 
         // Restoring min shared vector from l vector
-        minimum[tID] = l[tID];
-        minimum[tID + bDim] = tID;
-
-        __syncthreads();
-
+        minimumValues[tID] = l[tID];
+        minimumIndexes[tID] = tID;
         
         // in-place reduction
         for (int stride = 1; stride < bDim; stride *= 2) {
@@ -172,75 +154,70 @@ __global__ void shortestPathsParallelV2(int* matrix, int* results) {
             if (index < bDim) {
                 
                 int localMin = minWithVt(
-                    minimum[index],
-                    minimum[index + stride],
-                    Vt[minimum[index + bDim]],
-                    Vt[minimum[index + stride + bDim]]
+                    minimumValues[index],
+                    minimumValues[index + stride],
+                    Vt[minimumIndexes[index]],
+                    Vt[minimumIndexes[index + stride]]
                 );
 
                 int localMinIndex = minIndexWithVt(
-                    minimum[index],
-                    minimum[index + stride],
-                    minimum[index + bDim],
-                    minimum[index + stride + bDim],
-                    Vt[minimum[index + bDim]],
-                    Vt[minimum[index + stride + bDim]]
+                    minimumValues[index],
+                    minimumValues[index + stride],
+                    minimumIndexes[index],
+                    minimumIndexes[index + stride],
+                    Vt[minimumIndexes[index]],
+                    Vt[minimumIndexes[index + stride]]
                 );
                 //if (index + stride >= bDim) printf("%d", index + stride);
 
-                if (bID == 0 && tID == 0 && whileCounter == 100) {
+                /*if (bID == 0 && tID == 0 && whileCounter == 100) {
 
                     for (int i = 0; i < bDim; i++) {
                         printf("%d", Vt[i]);
                     }
-                    printf(" %d-%d\n", minimum[0], minimum[bDim]);
+                    printf(" %d-%d\n", minimumValues[0], minimumIndexes[0]);
                     for (int i = 0; i < bDim; i++) {
                         printf("%d", l[i]);
                     }
                     printf(" %d\n\n", whileCounter);
 
-                    printf("%d %d - %d %d - %d %d\n", minimum[index],
-                        minimum[index + bDim],
-                        minimum[index + stride],
-                        minimum[index + stride + bDim],
-                        Vt[minimum[index + bDim]],
-                        Vt[minimum[index + stride + bDim]]);
+                    printf("%d %d - %d %d - %d %d\n",
+                        minimumValues[index],
+                        minimumIndexes[index],
+                        minimumValues[index + stride],
+                        minimumIndexes[index + stride],
+                        Vt[minimumIndexes[index]],
+                        Vt[minimumIndexes[index + stride]]);
                     printf("%d %d %d %d\n\n", localMin, localMinIndex, index, stride);
-                }
-                __syncthreads();
-                minimum[index + bDim] = localMinIndex;
-                minimum[index] = localMin;
+                }*/
+                minimumIndexes[index] = localMinIndex;
+                minimumValues[index] = localMin;
             }
             // synchronize within threadblock
             __syncthreads();
         }
 
-        __syncthreads();
+        /*if (bID == 0 && tID == 0) {
 
-        // Add closest vertex to Vt
-        if (tID == 0) {
-            Vt[minimum[bDim]] = true;
-        }
-        __syncthreads();
-
-        /*if (bID == 5 && tID == 0) {
             for (int i = 0; i < bDim; i++) {
                 printf("%d", Vt[i]);
             }
-            printf(" %d-%d\n", minimum[bDim], minimum[0]);
-            for (int i = 0; i < bDim; i++) {
-                printf("%d", l[i]);
-            }
-            printf(" %d\n\n", whileCounter);
-        }*/
+            printf(" %d-%d\n", minimumValues[0], minimumIndexes[0]);
+        }
+
+        __syncthreads();*/
+
+        // Add closest vertex to Vt
+        if (tID == 0) {
+            Vt[minimumIndexes[0]] = true;
+        }
         __syncthreads();
 
         // Recompute l
         if (!Vt[tID]) {
 
-            int uvWeight = matrix[minimum[bDim] * bDim + tID];
-            l[tID] = min(l[tID], l[minimum[bDim]] + uvWeight);
-            __syncthreads();
+            int uvWeight = matrix[minimumIndexes[0] * bDim + tID];
+            l[tID] = min(l[tID], l[minimumIndexes[0]] + uvWeight);
         }
 
         __syncthreads();

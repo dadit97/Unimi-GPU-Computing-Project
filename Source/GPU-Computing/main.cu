@@ -22,11 +22,14 @@ int main(void) {
     printf("Max Blocks per Multiprocessor:%d\n", props.maxBlocksPerMultiProcessor);
     printf("Max Shared Memory size per Block:%d\n", props.sharedMemPerBlock);
 
-    int nodes = 128;
+    int nodes = 512;
     int* matrix = (int*)malloc(nodes * nodes * sizeof(int*));
     for (int i = 0; i < nodes; i++) {
         matrix[i] = 999;
     }
+
+    int* resultsV1 = (int*)malloc(nodes * nodes * sizeof(int));
+    int* resultsV2 = (int*)malloc(nodes * nodes * sizeof(int));
 
     printf("Shared Memory size per Block:%d bytes\n", sizeof(int) * nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes + sizeof(bool));
     generateRandomGraph(matrix, nodes);
@@ -95,11 +98,27 @@ int main(void) {
     }
     printf("Results copy on Host completed\n");
 
+    /*for (int i = 0; i < nodes; i++) {
+        for (int j = 0; j < nodes; j++) {
+            printf("%d", results[i * nodes + j]);
+        }
+        printf("\n");
+    }*/
+
+    for (int i = 0; i < nodes * nodes; i++) {
+        resultsV1[i] = results[i];
+    }
+
     printf("Kernel execution time: %f milliseconds\n", duration.count());
 
     // KERNEL V2 PART
 
     printf("\n\nKERNEL V2 PART\n\n");
+
+    // Results matrix re-initialization
+    for (int i = 0; i < nodes * nodes; i++) {
+        results[i] = 0;
+    }
 
     before = clock::now();
     shortestPathsParallelV2 <<<nodes, nodes, sizeof(int) * nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes + sizeof(bool) >> > (gpu_matrix, resultsMatrix);
@@ -130,6 +149,26 @@ int main(void) {
     }
     printf("Results copy on Host completed\n");
 
+    /*for (int i = 0; i < nodes; i++) {
+        for (int j = 0; j < nodes; j++) {
+            printf("%d", results[i * nodes + j]);
+        }
+        printf("\n");
+    }*/
+
+    for (int i = 0; i < nodes * nodes; i++) {
+        resultsV2[i] = results[i];
+    }
+
+    /*for (int i = 0; i < nodes; i++) {
+        printf("%d", resultsV1[i]);
+    }
+    printf("\n");
+    for (int i = 0; i < nodes; i++) {
+        printf("%d", resultsV2[i]);
+    }
+    printf("\n");*/
+
     cudaFree(resultsMatrix);
     cudaFree(gpu_matrix);
     printf("Kernel V2 execution time: %f milliseconds\n", duration.count());
@@ -148,6 +187,14 @@ int main(void) {
     duration = clock::now() - before;
 
     printf("Sequential execution time: %f milliseconds\n", duration.count());
+
+    /*for (int i = 0; i < nodes; i++) {
+        for (int j = 0; j < nodes; j++) {
+            printf("%d", results[i * nodes + j]);
+        }
+        printf("\n");
+    }*/
+
     free(results);
     free(matrix);
     return 0;
