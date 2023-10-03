@@ -22,7 +22,7 @@ int main(void) {
     printf("Max Blocks per Multiprocessor:%d\n", props.maxBlocksPerMultiProcessor);
     printf("Max Shared Memory size per Block:%d\n", props.sharedMemPerBlock);
 
-    int nodes = 512;
+    int nodes = 2048;
     int* matrix = (int*)malloc(nodes * nodes * sizeof(int*));
     for (int i = 0; i < nodes; i++) {
         matrix[i] = 999;
@@ -33,7 +33,7 @@ int main(void) {
 
     printf("Shared Memory size per Block:%d bytes\n", sizeof(int) * nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes + sizeof(bool));
     generateRandomGraph(matrix, nodes);
-    printf("Initial matrix loaded\n");
+    printf("Random graph initialized\n");
 
     /*for (int i = 0; i < nodes; i++) {
         for (int j = 0; j < nodes; j++) {
@@ -76,7 +76,10 @@ int main(void) {
 
     printf("\n\nKERNEL V1 PART\n\n");
 
-    shortestPathsParallel <<<1, nodes >>> (gpu_matrix, nodes, resultsMatrix);
+    int threadsPerBlock = 1024;
+    int blocks = (nodes + threadsPerBlock - 1) / threadsPerBlock;
+
+    shortestPathsParallel <<< blocks, threadsPerBlock >>> (gpu_matrix, nodes, resultsMatrix);
     cudaError = cudaGetLastError();
 
     if (cudaError != cudaSuccess) {

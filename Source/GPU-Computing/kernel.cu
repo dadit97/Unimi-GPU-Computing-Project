@@ -42,55 +42,59 @@ __device__ int minWithVt(int a, int b, bool VtA, bool VtB) {
 }
 
 __global__ void shortestPathsParallel(int* matrix, int dimension, int* results) {
-    // Each Thread computes the problem for the node with its tID index
-    int tID = threadIdx.x;
+    // Each Thread computes the problem for the node with its calculated tID index
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
 
-    // Boolean vector simulating the Vt set initialization
-    bool* Vt = (bool*)malloc((dimension) * sizeof(bool));
-    initializeBoolVector(Vt, dimension);
-    Vt[tID] = true;
+    if (idx < dimension) {
 
-    // l vector initialization
-    int* l = (int*)malloc(dimension * sizeof(int));
-    
-    // Getting direct connections with source node
-    for (int i = 0; i < dimension; i++) {
-        l[i] = matrix[tID * dimension + i];
-    }
-    
-    // while V != Vt
-    while (!areAllTrue(Vt, dimension)) {
-
-        int closestWeigth = 999999999;
-        int closestIndex = tID;
-
-        // Find the next vertex closest to source node
+        // Boolean vector simulating the Vt set initialization
+        bool* Vt = (bool*)malloc((dimension) * sizeof(bool));
+        initializeBoolVector(Vt, dimension);
+        Vt[idx] = true;
+        //printf("Ciao: %d\n", idx); // OK
+        // l vector initialization
+        int* l = (int*)malloc(dimension * sizeof(int));
+        
+        // Getting direct connections with source node
         for (int i = 0; i < dimension; i++) {
-            if (Vt[i] == true) continue;
-            if (l[i] < closestWeigth) {
-                closestWeigth = l[i];
-                closestIndex = i;
-                
+            if ((idx * dimension + i) >= (dimension * dimension)) printf("Value exceeded\n");
+            l[i] = matrix[idx * dimension + i];
+        }
+        printf("tId: %d\n", idx);
+        // while V != Vt
+        while (!areAllTrue(Vt, dimension)) {
+
+            int closestWeigth = 99999;
+            int closestIndex = idx;
+
+            // Find the next vertex closest to source node
+            for (int i = 0; i < dimension; i++) {
+                if (Vt[i] == true) continue;
+                if (l[i] < closestWeigth) {
+                    closestWeigth = l[i];
+                    closestIndex = i;
+
+                }
+            }
+
+            // Add closest vertex to Vt
+            Vt[closestIndex] = true;
+
+            // Recompute l
+            for (int i = 0; i < dimension; i++) {
+                if (Vt[i] == true) continue;
+                int uvWeight = matrix[closestIndex * dimension + i];
+                l[i] = min(l[i], l[closestIndex] + uvWeight);
             }
         }
-        
-        // Add closest vertex to Vt
-        Vt[closestIndex] = true;
-        
-        // Recompute l
+
         for (int i = 0; i < dimension; i++) {
-            if (Vt[i] == true) continue;
-            int uvWeight = matrix[closestIndex * dimension + i];
-            l[i] = min(l[i], l[closestIndex] + uvWeight);
+            results[idx * dimension + i] = l[i];
         }
-    }
 
-    for (int i = 0; i < dimension; i++) {
-        results[tID * dimension + i] = l[i];
+        free(Vt);
+        free(l);
     }
-
-    free(Vt);
-    free(l);
 }
 
 __global__ void shortestPathsParallelV2(int* matrix, int* results) {

@@ -1,17 +1,14 @@
-﻿  Compiling CUDA source file kernel.cu...
-  
-  D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\include"  -G   --keep-dir x64\Debug  -maxrregcount=0   --machine 64 --compile -cudart static  -g  -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -Xcompiler "/Fdx64\Debug\vc143.pdb" -o "D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\x64\Debug\kernel.cu.obj" "D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\kernel.cu" 
-  Compiling CUDA source file main.cu...
+﻿  Compiling CUDA source file main.cu...
   
   D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\bin\nvcc.exe" -gencode=arch=compute_52,code=\"sm_52,compute_52\" --use-local-env -ccbin "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.37.32822\bin\HostX64\x64" -x cu   -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\include"  -G   --keep-dir x64\Debug  -maxrregcount=0   --machine 64 --compile -cudart static  -g  -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /FS /Zi /RTC1 /MDd " -Xcompiler "/Fdx64\Debug\vc143.pdb" -o "D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\x64\Debug\main.cu.obj" "D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\main.cu" 
-  kernel.cu
   main.cu
-  tmpxft_00003a84_00000000-7_main.cudafe1.cpp
+  tmpxft_000032a0_00000000-7_main.cudafe1.cpp
 D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\main.cu(23): warning C4477: 'printf': con la stringa di formato '%d' è necessario un argomento di tipo 'int', ma il tipo dell'argomento variadic 1 è 'size_t'
   D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\main.cu(23): note: provare a usare '%zd' nella stringa di formato
 D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\main.cu(34): warning C4477: 'printf': con la stringa di formato '%d' è necessario un argomento di tipo 'int', ma il tipo dell'argomento variadic 1 è 'size_t'
   D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\main.cu(34): note: provare a usare '%zd' nella stringa di formato
-  tmpxft_00003ab0_00000000-7_kernel.cudafe1.cpp
-     Creazione della libreria D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\x64\Debug\GPU-Computing.lib e dell'oggetto D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\x64\Debug\GPU-Computing.exp
-LINK : warning LNK4098: la libreria predefinita 'LIBCMT' è in conflitto con l'utilizzo di altre librerie; usare /NODEFAULTLIB:libreria
+  data.cpp
+D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\data.cpp(127,12): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\data.cpp(137,17): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\data.cpp(143,21): warning C4996: 'strtok': This function or variable may be unsafe. Consider using strtok_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   GPU-Computing.vcxproj -> D:\Documenti\UNIMI\GPU Computing\Unimi-GPU-Computing-Project\Source\GPU-Computing\x64\Debug\GPU-Computing.exe
