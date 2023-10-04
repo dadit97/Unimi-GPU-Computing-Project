@@ -41,26 +41,24 @@ __device__ int minWithVt(int a, int b, bool VtA, bool VtB) {
     return min(a, b);
 }
 
-__global__ void shortestPathsParallel(int* matrix, int dimension, int* results) {
+__global__ void shortestPathsParallel(int* matrix, int dimension, int* results, int* lArray, bool* VtArray) {
     // Each Thread computes the problem for the node with its calculated tID index
     int idx = blockIdx.x * blockDim.x + threadIdx.x;
 
     if (idx < dimension) {
 
         // Boolean vector simulating the Vt set initialization
-        bool* Vt = (bool*)malloc((dimension) * sizeof(bool));
+        bool* Vt = VtArray + idx * dimension;
         initializeBoolVector(Vt, dimension);
         Vt[idx] = true;
-        //printf("Ciao: %d\n", idx); // OK
+
         // l vector initialization
-        int* l = (int*)malloc(dimension * sizeof(int));
-        
+        int* l = lArray + idx * dimension;
         // Getting direct connections with source node
         for (int i = 0; i < dimension; i++) {
-            if ((idx * dimension + i) >= (dimension * dimension)) printf("Value exceeded\n");
             l[i] = matrix[idx * dimension + i];
         }
-        printf("tId: %d\n", idx);
+
         // while V != Vt
         while (!areAllTrue(Vt, dimension)) {
 
@@ -91,9 +89,6 @@ __global__ void shortestPathsParallel(int* matrix, int dimension, int* results) 
         for (int i = 0; i < dimension; i++) {
             results[idx * dimension + i] = l[i];
         }
-
-        free(Vt);
-        free(l);
     }
 }
 

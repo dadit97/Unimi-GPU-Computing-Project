@@ -19,10 +19,11 @@ int main(void) {
     cudaGetDeviceProperties(&props, device);
 
     printf("Max Threads per Block:%d\n", props.maxThreadsPerBlock);
+    printf("Max Grid size:%d\n", props.maxGridSize);
     printf("Max Blocks per Multiprocessor:%d\n", props.maxBlocksPerMultiProcessor);
     printf("Max Shared Memory size per Block:%d\n", props.sharedMemPerBlock);
 
-    int nodes = 2048;
+    int nodes = 1024;
     int* matrix = (int*)malloc(nodes * nodes * sizeof(int*));
     for (int i = 0; i < nodes; i++) {
         matrix[i] = 999;
@@ -60,6 +61,7 @@ int main(void) {
 
     int* resultsMatrix;
     int* results = (int*)malloc(nodes * nodes * sizeof(int));
+
     cudaError = cudaMalloc(&resultsMatrix, nodes * nodes * sizeof(int));
 
     if (cudaError != cudaSuccess) {
@@ -68,18 +70,57 @@ int main(void) {
     }
     printf("Results matrix allocation completed\n");
 
+    int* lArray;
+    cudaError = cudaMalloc(&lArray, nodes * nodes * sizeof(int));
+
+    if (cudaError != cudaSuccess) {
+        printf("Error during results lArray allocation on GPU: %s\n", cudaGetErrorString(cudaError));
+        exit(1);
+    }
+    printf("lArray allocation completed\n");
+
+    bool* VtArray;
+    cudaError = cudaMalloc(&VtArray, nodes * nodes * sizeof(bool));
+
+    if (cudaError != cudaSuccess) {
+        printf("Error during results VtArray allocation on GPU: %s\n", cudaGetErrorString(cudaError));
+        exit(1);
+    }
+    printf("VtArray allocation completed\n");
+
+    //SEQUENTIAL PART
+
+    // Results matrix re-initialization
+    for (int i = 0; i < nodes * nodes; i++) {
+        results[i] = 0;
+    }
+
+    printf("\n\nSEQUENTIAL PART\n\n");
+
     using clock = std::chrono::system_clock;
     using ms = std::chrono::duration<double, std::milli>;
     auto before = clock::now();
+    shortestPathsSequential(matrix, nodes, results);
+    ms duration = clock::now() - before;
 
+    printf("Sequential execution time: %f milliseconds\n", duration.count());
+
+    /*for (int i = 0; i < nodes; i++) {
+        for (int j = 0; j < nodes; j++) {
+            printf("%d", results[i * nodes + j]);
+        }
+        printf("\n");
+    }*/
+    
     //KERNEL V1 PART
 
     printf("\n\nKERNEL V1 PART\n\n");
 
     int threadsPerBlock = 1024;
     int blocks = (nodes + threadsPerBlock - 1) / threadsPerBlock;
+    before = clock::now();
 
-    shortestPathsParallel <<< blocks, threadsPerBlock >>> (gpu_matrix, nodes, resultsMatrix);
+    shortestPathsParallel <<< blocks, threadsPerBlock >>> (gpu_matrix, nodes, resultsMatrix, lArray, VtArray);
     cudaError = cudaGetLastError();
 
     if (cudaError != cudaSuccess) {
@@ -93,7 +134,7 @@ int main(void) {
         exit(1);
     }
 
-    ms duration = clock::now() - before;
+    duration = clock::now() - before;
 
     cudaError = cudaMemcpy(results, resultsMatrix, nodes * nodes * sizeof(int), cudaMemcpyDeviceToHost);
     if (cudaError != cudaSuccess) {
@@ -112,7 +153,10 @@ int main(void) {
         resultsV1[i] = results[i];
     }
 
-    printf("Kernel execution time: %f milliseconds\n", duration.count());
+    cudaFree(lArray);
+    cudaFree(VtArray);
+
+    printf("Kernel V1 execution time: %f milliseconds\n", duration.count());
 
     // KERNEL V2 PART
 
@@ -124,7 +168,7 @@ int main(void) {
     }
 
     before = clock::now();
-    shortestPathsParallelV2 <<<nodes, nodes, sizeof(int) * nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes + sizeof(bool) >> > (gpu_matrix, resultsMatrix);
+    shortestPathsParallelV2 <<<nodes, nodes, sizeof(int) * nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes + sizeof(bool) >>> (gpu_matrix, resultsMatrix);
     cudaError = cudaGetLastError();
 
     if (cudaError != cudaSuccess) {
@@ -179,7 +223,7 @@ int main(void) {
     //SEQUENTIAL PART
 
     // Results matrix re-initialization
-    for (int i = 0; i < nodes * nodes; i++) {
+    /*for (int i = 0; i < nodes * nodes; i++) {
         results[i] = 0;
     }
 
@@ -189,7 +233,7 @@ int main(void) {
     shortestPathsSequential(matrix, nodes, results);
     duration = clock::now() - before;
 
-    printf("Sequential execution time: %f milliseconds\n", duration.count());
+    printf("Sequential execution time: %f milliseconds\n", duration.count());*/
 
     /*for (int i = 0; i < nodes; i++) {
         for (int j = 0; j < nodes; j++) {
