@@ -19,11 +19,10 @@ int main(void) {
     cudaGetDeviceProperties(&props, device);
 
     printf("Max Threads per Block:%d\n", props.maxThreadsPerBlock);
-    printf("Max Grid size:%d\n", props.maxGridSize);
     printf("Max Blocks per Multiprocessor:%d\n", props.maxBlocksPerMultiProcessor);
     printf("Max Shared Memory size per Block:%d\n", props.sharedMemPerBlock);
 
-    int nodes = 1024;
+    int nodes = 4096;
     int* matrix = (int*)malloc(nodes * nodes * sizeof(int*));
     for (int i = 0; i < nodes; i++) {
         matrix[i] = 999;
@@ -34,7 +33,7 @@ int main(void) {
 
     printf("Shared Memory size per Block:%d bytes\n", sizeof(int) * nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes + sizeof(bool));
     generateRandomGraph(matrix, nodes);
-    printf("Random graph initialized\n");
+    printf("Random graph of %d nodes initialized\n", nodes);
 
     /*for (int i = 0; i < nodes; i++) {
         for (int j = 0; j < nodes; j++) {
@@ -159,88 +158,73 @@ int main(void) {
     printf("Kernel V1 execution time: %f milliseconds\n", duration.count());
 
     // KERNEL V2 PART
+    if (nodes <= 1024) {
+        printf("\n\nKERNEL V2 PART\n\n");
 
-    printf("\n\nKERNEL V2 PART\n\n");
+        // Results matrix re-initialization
+        for (int i = 0; i < nodes * nodes; i++) {
+            results[i] = 0;
+        }
 
-    // Results matrix re-initialization
-    for (int i = 0; i < nodes * nodes; i++) {
-        results[i] = 0;
-    }
+        before = clock::now();
+        shortestPathsParallelV2 << <nodes, nodes, sizeof(int)* nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes + sizeof(bool) >> > (gpu_matrix, resultsMatrix);
+        cudaError = cudaGetLastError();
 
-    before = clock::now();
-    shortestPathsParallelV2 <<<nodes, nodes, sizeof(int) * nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes + sizeof(bool) >>> (gpu_matrix, resultsMatrix);
-    cudaError = cudaGetLastError();
+        if (cudaError != cudaSuccess) {
+            printf("Error during kernel V2 launch: %s\n", cudaGetErrorString(cudaError));
+            exit(1);
+        }
 
-    if (cudaError != cudaSuccess) {
-        printf("Error during kernel V2 launch: %s\n", cudaGetErrorString(cudaError));
-        exit(1);
-    }
+        cudaError = cudaPeekAtLastError();
+        if (cudaError != cudaSuccess) {
+            printf("Error during kernel V2 execution: %s\n", cudaGetErrorString(cudaError));
+            exit(1);
+        }
 
-    cudaError = cudaPeekAtLastError();
-    if (cudaError != cudaSuccess) {
-        printf("Error during kernel V2 execution: %s\n", cudaGetErrorString(cudaError));
-        exit(1);
-    }
+        cudaError = cudaDeviceSynchronize();
+        if (cudaError != cudaSuccess) {
+            printf("Kernel V2 syncronization returned error: %s\n", cudaGetErrorString(cudaError));
+            exit(1);
+        }
 
-    cudaError = cudaDeviceSynchronize();
-    if (cudaError != cudaSuccess) {
-        printf("Kernel V2 syncronization returned error: %s\n", cudaGetErrorString(cudaError));
-        exit(1);
-    }
+        duration = clock::now() - before;
 
-    duration = clock::now() - before;
+        cudaError = cudaMemcpy(results, resultsMatrix, nodes * nodes * sizeof(int), cudaMemcpyDeviceToHost);
+        if (cudaError != cudaSuccess) {
+            printf("Error during results copy on Host: %s\n", cudaGetErrorString(cudaError));
+        }
+        printf("Results copy on Host completed\n");
 
-    cudaError = cudaMemcpy(results, resultsMatrix, nodes * nodes * sizeof(int), cudaMemcpyDeviceToHost);
-    if (cudaError != cudaSuccess) {
-        printf("Error during results copy on Host: %s\n", cudaGetErrorString(cudaError));
-    }
-    printf("Results copy on Host completed\n");
+        /*for (int i = 0; i < nodes; i++) {
+            for (int j = 0; j < nodes; j++) {
+                printf("%d", results[i * nodes + j]);
+            }
+            printf("\n");
+        }*/
 
-    /*for (int i = 0; i < nodes; i++) {
-        for (int j = 0; j < nodes; j++) {
-            printf("%d", results[i * nodes + j]);
+        for (int i = 0; i < nodes * nodes; i++) {
+            resultsV2[i] = results[i];
+        }
+
+        /*for (int i = 0; i < nodes; i++) {
+            for (int j = 0; j < nodes; j++) {
+                printf("%d", resultsV1[i * nodes + j]);
+            }
+            printf("\n");
         }
         printf("\n");
-    }*/
-
-    for (int i = 0; i < nodes * nodes; i++) {
-        resultsV2[i] = results[i];
+        for (int i = 0; i < nodes; i++) {
+            for (int j = 0; j < nodes; j++) {
+                printf("%d", resultsV2[i * nodes + j]);
+            }
+            printf("\n");
+        }
+        printf("\n");*/
+        printf("Kernel V2 execution time: %f milliseconds\n", duration.count());
     }
-
-    /*for (int i = 0; i < nodes; i++) {
-        printf("%d", resultsV1[i]);
-    }
-    printf("\n");
-    for (int i = 0; i < nodes; i++) {
-        printf("%d", resultsV2[i]);
-    }
-    printf("\n");*/
 
     cudaFree(resultsMatrix);
     cudaFree(gpu_matrix);
-    printf("Kernel V2 execution time: %f milliseconds\n", duration.count());
-
-    //SEQUENTIAL PART
-
-    // Results matrix re-initialization
-    /*for (int i = 0; i < nodes * nodes; i++) {
-        results[i] = 0;
-    }
-
-    printf("\n\nSEQUENTIAL PART\n\n");
-
-    before = clock::now();
-    shortestPathsSequential(matrix, nodes, results);
-    duration = clock::now() - before;
-
-    printf("Sequential execution time: %f milliseconds\n", duration.count());*/
-
-    /*for (int i = 0; i < nodes; i++) {
-        for (int j = 0; j < nodes; j++) {
-            printf("%d", results[i * nodes + j]);
-        }
-        printf("\n");
-    }*/
 
     free(results);
     free(matrix);
