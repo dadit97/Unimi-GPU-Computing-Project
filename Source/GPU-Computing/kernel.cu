@@ -105,7 +105,7 @@ __global__ void shortestPathsParallelV2(int* matrix, int* results) {
     // l vector initialization
     int* l = (int*)&sharedData[0];
 
-    // minimum vector initialization, first half are values second half are indexes
+    // minimum vectors initialization
     int* minimumValues = (int*)&l[bDim];
     int* minimumIndexes = (int*)&minimumValues[bDim];
 

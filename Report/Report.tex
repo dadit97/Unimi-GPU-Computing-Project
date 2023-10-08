@@ -127,11 +127,17 @@ The sequential algorithm perform $n$ times the basic algorithm , which has a com
 \subsection{Basic parallel version}
 The idea behind the initially implemented parallel version is simple:
 to solve the problem we have to launch the algorithm |V| times, where V is the set of nodes of the graph.
-Using only one block of the GPU, every thread executes the algorithm for one node of the graph, and at the end insert the results in the correct
+Every thread executes the algorithm for one node of the graph, and at the end insert the results in the correct
 row of the matrix in Global Memory.\\
+
+The computation has been spreaded over the gpu blocks using a fixed amount of threads per block (1024) and
+a variable size of blocks, based on the number of nodes of the graph. \\
 
 The shared memory is not used because the variables needed for the computation are all locally present inside the thread, which is the main advantage of
 this first technique, because there are not requirements of any kind on inter-process communications. Each thread works completely isolated from the others.\\
+
+Due to thread memory limitations, the main variables of each thread had to be stored into Global Memory, and retrieved using the global thread id, calculated
+at the start of the computation.\\
 
 This implementation requires a thread per node of the graph, which still uses the various for loops present in the sequential version,
 this fact make this implementation simple to program, with a decent speedup, provided the graph is big enough.\\
@@ -178,7 +184,14 @@ The sequential version is implemented by the function
 where matrix and results are respectively the Adiacency Matrix of the graph and the result matrix, while dimension is the number
 of nodes of the graph.\\
 
-Then the data structures for the computation are allocated and initialized, with Vt having all false values except for the Source node
+Despite the fact that a matrix is generally considered a sparse and inefficient storage method for a graph, in this particular case this data structure
+has the advantage of containing some vital information in the structure itself, while the same implementation of Dijkstra using a linked list type of structure 
+would have been a lot more convoluted, with various auxilary implementations required to evalutate the weight of the path from every node to another.\\
+
+It also would not make a lot of sense to encode the result of this algorithm into a listed structure, beacuse the objective is to find the path form very node to every other node,
+so a list would not be as efficient as a matrix to encode $nodes^2$ values.\\
+
+The data structures for the computation are then allocated and initialized, with Vt having all false values except for the Source node
 and l having the values of the corresponding matrix row.
 \begin{verbatim}
     bool* Vt = (bool*)malloc((dimension) * sizeof(bool));
@@ -201,7 +214,7 @@ for (int i = 0; i < dimension; i++) {
 }
 \end{verbatim}
 
-Then the Vt cell of the closest node is set to true and the l array is updated with the minimum between the the current vslue and the
+Then the Vt cell of the closest node is set to true and the l array is updated with the minimum between the the current value and the
 possible better value.
 \begin{verbatim}
 Vt[closestIndex] = true;
@@ -222,16 +235,16 @@ for (int i = 0; i < dimension; i++) {
 \subsection{Basic parallel version}
 This simple parallel version is implemented by the function
 \begin{verbatim}
-__global__ void shortestPathsParallel(int* matrix, int dimension, int* results)
+__global__ void shortestPathsParallel(int* matrix, int dimension, int* results, int* lArray, bool* VtArray)
 \end{verbatim}
 
 The algorithm is not substantially different from the sequential version, the only change present is that now the reference for the
-Source node is not the index of a for loop, but the thread Id.\\
+Source node is not the index of a for loop, but the calculated thread Id.\\
 
 Every thread of the single block used, computes the sequential version without communicating in any way with other threads, not even during
 the results copying section.
 
-This means that during initialization the Vt index to set is the one corresponding to the tID variable. This id is also used during the
+This means that during initialization the Vt index to set is the one corresponding to the idx variable. This id is also used during the
 update of the l array and the filling of the results matrix.\\
 
 \subsection{Improved parallel version}
@@ -245,24 +258,25 @@ This time the code has various significant differences from the sequential one.\
 Beginning from the initialization phase, the usage of multiple blocks required the utilization of the shared memory, to guarantee to all threads of the block
 the necessary information with good access speed.
 \begin{verbatim}
-extern __shared__ int s[];
-int* sharedData = s;
-
-// l vector initialization
-int* l = (int*)&sharedData[0];
-
-// minimum vector initialization, first half are values second half are indexes
-int* minimum = (int*)&l[bDim];
-
-// Boolean vector simulating the Vt set initialization
-bool* Vt = (bool*)&minimum[bDim * 2];
-
-bool* stopCycle = (bool*)&Vt[bDim];
+    // Shared memory initialization
+    extern __shared__ int s[];
+    int* sharedData = s;
+    
+    // l vector initialization
+    int* l = (int*)&sharedData[0];
+    
+    // minimum vectors initialization
+    int* minimumValues = (int*)&l[bDim];
+    int* minimumIndexes = (int*)&minimumValues[bDim];
+    
+    // Boolean vector simulating the Vt set initialization
+    bool* Vt = (bool*)&minimumIndexes[bDim];
+    
+    bool* stopCycle = (bool*)&Vt[bDim];
 \end{verbatim}
 
-The shared memory initialization contains an additional vector, the minimum array, used during the computation of the local minimum, a notable thing about it
-is the fact that it is conceptually divided in two halves, the frist half containing the weight of a certain node, the second half containing the index of that node
-according to the original matrix.\\
+The shared memory initialization contains an additional vector, the minimumValues and minimumIndexes arrays, used during the computation of the local minimum,ù
+the first containing the weight of a certain node, the second containing the index of that node according to the original matrix.\\
 
 This is necessary for the correct computation of the parallel reduction, because the standard reduction does not take into account an external index, which is necessary
 in this application, so there are two assignments instead of one, one for the value, the other for the index.
@@ -284,35 +298,57 @@ cost, because now the number of comparisons that a thread must perform for every
     \captionof{figure}{Parallel reduction scheme}
 \end{center}
 \begin{verbatim}
-int localMin = minWithVt(
-    minimum[index],
-    minimum[index + stride],
-    Vt[minimum[index + bDim]],
-    Vt[minimum[index + stride + bDim]]
+    int localMin = minWithVt(
+    minimumValues[index],
+    minimumValues[index + stride],
+    Vt[minimumIndexes[index]],
+    Vt[minimumIndexes[index + stride]]
 );
+
 int localMinIndex = minIndexWithVt(
-    minimum[index],
-    localMin,
-    minimum[index + bDim],
-    minimum[index + stride + bDim],
-    Vt[minimum[index + bDim]],
-    Vt[minimum[index + stride + bDim]]
+    minimumValues[index],
+    minimumValues[index + stride],
+    minimumIndexes[index],
+    minimumIndexes[index + stride],
+    Vt[minimumIndexes[index]],
+    Vt[minimumIndexes[index + stride]]
 );
 \end{verbatim}
 The two functions above are responsible for finding the minimum and the minimum index, taking the corresponding Vt values into account.
 This part of the implementation has been particularly tricky, with the algorithm not converging to a solution, due to set errors of the new Vt value.\\
 
-At the end of the parallel reduction section there will be the value and the index of the minimum edge respectiverly at minimum[0] and minimum[blockDimension].
+At the end of the parallel reduction section there will be the value and the index of the minimum edge respectiverly at minimumValues[0] and minimumIndexes[0].
 
-The update of the l array is executed in the same way as before, with every thread updating its cell of the array.
+The update of the l array is executed in the same way as before, with every thread updating its cell of the array.\\
 
+\subsubsection{Algorithm limitations}
+
+The main setback of this algorithm is that it does not scale well with the number of nodes in the graph. In this case the tests were performed on a GPU with
+a maximum number of thread per block of 1024, so that is the limit of the graph dimension. The performance evaluation is therefore not exhaustive due to the fact that the graph can
+only be that big, a more powerful card should be able to handle bigger graphs and show the improvements in performance.\\
+
+To make this algorithm usable on a GPU like the tested one, the usage of the shared memory should be completely eliminated,
+because in that case the informations have to be available to threads which are not in the same block.
+
+This would reduce the performances of the memory accesses, but would make the procedure available for lower end cards.\\
+
+\newpage
 \section{Benchmarking}
 
-\subsection{Time usage}
+The tests have been performed on a machine with a NVidia GeForce GTX 1050, with these basic specifications:\\
 
-\subsection{Memory usage}
+\begin{itemize}
+    \item   Max Threads per Block: 1024
+    \item   Max Blocks per Multiprocessor: 32
+    \item   Max Shared Memory size per Block: 49152 bytes\\
+\end{itemize}
 
-\subsection{Profiling}
+The performances in terms of execution time have been summarized into the followuing chart:
+
+\begin{center}
+    \includegraphics[width=12cm]{/images/chart.jpg}
+    \captionof{figure}{Parallel reduction scheme}
+\end{center}
 
 \newpage
 \printbibliography % Output the bibliography

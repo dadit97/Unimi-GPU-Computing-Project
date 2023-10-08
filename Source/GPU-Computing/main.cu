@@ -20,9 +20,9 @@ int main(void) {
 
     printf("Max Threads per Block:%d\n", props.maxThreadsPerBlock);
     printf("Max Blocks per Multiprocessor:%d\n", props.maxBlocksPerMultiProcessor);
-    printf("Max Shared Memory size per Block:%d\n", props.sharedMemPerBlock);
+    printf("Max Shared Memory size per Block:%d bytes\n", props.sharedMemPerBlock);
 
-    int nodes = 4096;
+    int nodes = 512;
     int* matrix = (int*)malloc(nodes * nodes * sizeof(int*));
     for (int i = 0; i < nodes; i++) {
         matrix[i] = 999;
@@ -31,7 +31,7 @@ int main(void) {
     int* resultsV1 = (int*)malloc(nodes * nodes * sizeof(int));
     int* resultsV2 = (int*)malloc(nodes * nodes * sizeof(int));
 
-    printf("Shared Memory size per Block:%d bytes\n", sizeof(int) * nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes + sizeof(bool));
+    printf("Shared Memory size used per Block:%d bytes\n", sizeof(int) * nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes + sizeof(bool));
     generateRandomGraph(matrix, nodes);
     printf("Random graph of %d nodes initialized\n", nodes);
 
