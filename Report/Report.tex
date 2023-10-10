@@ -241,7 +241,7 @@ __global__ void shortestPathsParallel(int* matrix, int dimension, int* results, 
 The algorithm is not substantially different from the sequential version, the only change present is that now the reference for the
 Source node is not the index of a for loop, but the calculated thread Id.\\
 
-Every thread of the single block used, computes the sequential version without communicating in any way with other threads, not even during
+Every thread computes the sequential version without communicating in any way with other threads, not even during
 the results copying section.
 
 This means that during initialization the Vt index to set is the one corresponding to the idx variable. This id is also used during the
@@ -275,7 +275,7 @@ the necessary information with good access speed.
     bool* stopCycle = (bool*)&Vt[bDim];
 \end{verbatim}
 
-The shared memory initialization contains an additional vector, the minimumValues and minimumIndexes arrays, used during the computation of the local minimum,ù
+The shared memory initialization contains an additional vector, the minimumValues and minimumIndexes arrays, used during the computation of the local minimum,
 the first containing the weight of a certain node, the second containing the index of that node according to the original matrix.\\
 
 This is necessary for the correct computation of the parallel reduction, because the standard reduction does not take into account an external index, which is necessary
@@ -343,12 +343,36 @@ The tests have been performed on a machine with a NVidia GeForce GTX 1050, with 
     \item   Max Shared Memory size per Block: 49152 bytes\\
 \end{itemize}
 
-The performances in terms of execution time have been summarized into the followuing chart:
+The performances in terms of execution time have been summarized into the following chart:
 
 \begin{center}
     \includegraphics[width=12cm]{/images/chart.jpg}
     \captionof{figure}{Parallel reduction scheme}
 \end{center}
+
+The chart shows that the basic parallel version has a slighlty less tilted curve than the sedquential one, but the gain is not
+that significant, while the improved parallel version shows an initial spike before the aother two starts to ascend. \\
+
+This may be due to the overhead of the parallel execution, in an area where the number of nodes is not high enough to show its efficacy.
+\newpage
+
+The resulting speedups are the shown below:
+
+\begin{center}
+    \begin{tabular}{ |c|c|c|c|c|c| }
+    \hline
+     Number of nodes & 256 & 512 & 1024 & 2048 & 4096 \\ \hline
+     Basic parallel version & 0.58 & 1.26 & 2.18 & 2.22 & 1.47 \\ \hline
+     Improved parallel version & 0.48 & 0.36 & 0.16  & NA & NA \\ \hline
+    \end{tabular}
+    \end{center}
+
+The improved parallel version speedups could not be evaluated for graphs larger than 2014 nodes due to the testing machine
+limitations. It is worth noting thought that the performances of the latter are always worse than the sequential version, while the basic
+version outperforms the sequential starting from 512 nodes of dimensions. \\
+
+All the speedups of the basic parallel version are evaluated considering a number of processors equal to the number of nodes, while the speedups
+of the improved parallel version take into account $nodes * nodes$ processors.
 
 \newpage
 \printbibliography % Output the bibliography
