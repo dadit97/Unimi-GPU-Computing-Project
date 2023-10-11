@@ -163,44 +163,13 @@ __global__ void shortestPathsParallelV2(int* matrix, int* results) {
                     Vt[minimumIndexes[index]],
                     Vt[minimumIndexes[index + stride]]
                 );
-                //if (index + stride >= bDim) printf("%d", index + stride);
 
-                /*if (bID == 0 && tID == 0 && whileCounter == 100) {
-
-                    for (int i = 0; i < bDim; i++) {
-                        printf("%d", Vt[i]);
-                    }
-                    printf(" %d-%d\n", minimumValues[0], minimumIndexes[0]);
-                    for (int i = 0; i < bDim; i++) {
-                        printf("%d", l[i]);
-                    }
-                    printf(" %d\n\n", whileCounter);
-
-                    printf("%d %d - %d %d - %d %d\n",
-                        minimumValues[index],
-                        minimumIndexes[index],
-                        minimumValues[index + stride],
-                        minimumIndexes[index + stride],
-                        Vt[minimumIndexes[index]],
-                        Vt[minimumIndexes[index + stride]]);
-                    printf("%d %d %d %d\n\n", localMin, localMinIndex, index, stride);
-                }*/
                 minimumIndexes[index] = localMinIndex;
                 minimumValues[index] = localMin;
             }
             // synchronize within threadblock
             __syncthreads();
         }
-
-        /*if (bID == 0 && tID == 0) {
-
-            for (int i = 0; i < bDim; i++) {
-                printf("%d", Vt[i]);
-            }
-            printf(" %d-%d\n", minimumValues[0], minimumIndexes[0]);
-        }
-
-        __syncthreads();*/
 
         // Add closest vertex to Vt
         if (tID == 0) {

@@ -12,7 +12,7 @@
 \usepackage{subcaption}
 
 \addbibresource{bibliography.bib} % Bibliography file (located in the same folder as the template)
-
+\nocite{*} 
 %----------------------------------------------------------------------------------------
 %	REPORT INFORMATION
 %----------------------------------------------------------------------------------------
@@ -166,7 +166,7 @@ cause concurrent acces which would slow down the evaluation.
 The improved version increases the concurrency by using $n$ processor per instance, so $n^2$ processors, this means thath every instance is executed
 by n processors, but we have to take into account the communication delay:\\
 \begin{itemize}
-    \item Time per Source: $O(n2/p + nlog(p))$
+    \item Time per Source: $O(n^2/p + nlog(p))$
     \item Number of processors: $n$
     \item Total Time: $O(n^3 / n) + O(nlog(p)) = O(n^2) + O(nlog(p))$\\
 \end{itemize}
@@ -214,7 +214,7 @@ for (int i = 0; i < dimension; i++) {
 }
 \end{verbatim}
 
-Then the Vt cell of the closest node is set to true and the l array is updated with the minimum between the the current value and the
+Then the Vt cell of the closest node is set to true and the l array is updated with the minimum between the current value and the
 possible better value.
 \begin{verbatim}
 Vt[closestIndex] = true;
@@ -286,7 +286,7 @@ The Parallel Reduction is a strategy to perform quickly some operations that oup
 The idea is to maximize the usage of a parallel processor, by reducing the original array in smaller and smaller parts, with each thread evaluating two values per cycle.
 At the end of the operation the result will lay in the first cell of the array.\\
 
-This operation dows not require additional data structures to work, so it works competely in-place. The general field of application are mathematical operations such as sum or, in this case, a
+This operation dows not require additional data structures to function, so it works competely in-place. The general field of application are mathematical operations such as sum or, in this case, a
 minimum operation.
 
 The standard algorithm of the reduction has been slighly modified to keep track of the node original index between the various passages. This comes with an additional
@@ -298,7 +298,7 @@ cost, because now the number of comparisons that a thread must perform for every
     \captionof{figure}{Parallel reduction scheme}
 \end{center}
 \begin{verbatim}
-    int localMin = minWithVt(
+int localMin = minWithVt(
     minimumValues[index],
     minimumValues[index + stride],
     Vt[minimumIndexes[index]],
@@ -335,7 +335,8 @@ This would reduce the performances of the memory accesses, but would make the pr
 \newpage
 \section{Benchmarking}
 
-The tests have been performed on a machine with a NVidia GeForce GTX 1050, with these basic specifications:\\
+The tests have been performed on a machine equipped with a GPU NVidia GeForce GTX 1050 and an Intel processor i5-8300H with core frequency of 2.3 GHz,
+the GPU architecture possesses these basic specifications:\\
 
 \begin{itemize}
     \item   Max Threads per Block: 1024
@@ -359,13 +360,16 @@ This may be due to the overhead of the parallel execution, in an area where the 
 The resulting speedups are the shown below:
 
 \begin{center}
-    \begin{tabular}{ |c|c|c|c|c|c| }
+    \begin{tabular}{ |c|c|c| }
     \hline
-     Number of nodes & 256 & 512 & 1024 & 2048 & 4096 \\ \hline
-     Basic parallel version & 0.58 & 1.26 & 2.18 & 2.22 & 1.47 \\ \hline
-     Improved parallel version & 0.48 & 0.36 & 0.16  & NA & NA \\ \hline
+    \textbf{Number of nodes} & \textbf{Basic parallel version} & \textbf{Improved parallel version} \\ \hline
+    256 & 0.58  & 0.48 \\ \hline
+    512 & 1.26 & 0.36 \\ \hline
+    1024 & 2.18 & 0.16 \\ \hline
+    2048 & 2.22 & NA \\ \hline
+    4096 & 1.47 & NA \\ \hline
     \end{tabular}
-    \end{center}
+\end{center}
 
 The improved parallel version speedups could not be evaluated for graphs larger than 2014 nodes due to the testing machine
 limitations. It is worth noting thought that the performances of the latter are always worse than the sequential version, while the basic
@@ -373,6 +377,18 @@ version outperforms the sequential starting from 512 nodes of dimensions. \\
 
 All the speedups of the basic parallel version are evaluated considering a number of processors equal to the number of nodes, while the speedups
 of the improved parallel version take into account $nodes * nodes$ processors.
+
+\section{Conclusions}
+
+This paper discussed about two parallel implementations of the Dijkstra's Algorithm, unfortunately the results cannot be cosidered conclusive in any way,
+due to excessive testing limitations of the benchmarking machine. \\
+
+The improved version performances are basically unknown at this point, because the testing could not work on graphs with a decent amount of nodes,
+where the full parallel version would has the possibility to be effective compared to the other two versions. \\
+
+The basic parallel version also does not show the expected speedup, while being faster than the sequential version the improvement shown does not bring the
+time required to a smaller scale of reference, the elapsed time is smaller but in the same range of values. For this reason it is hard to tell if it would be worth using
+parallel processors with this algorithm on a real problem, considering the costs of this type of hardware, for a gain that is not that significant. \\
 
 \newpage
 \printbibliography % Output the bibliography
