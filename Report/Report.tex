@@ -124,7 +124,7 @@ The sequential algorithm perform $n$ times the basic algorithm , which has a com
     \item Total Time: $O(n^3)$\\
 \end{itemize}
 
-\subsection{Basic parallel version}
+\subsection{Source Partitioned version}
 The idea behind the initially implemented parallel version is simple:
 to solve the problem we have to launch the algorithm |V| times, where V is the set of nodes of the graph.
 Every thread executes the algorithm for one node of the graph, and at the end insert the results in the correct
@@ -151,7 +151,7 @@ This version improves the performance by performing the basic algorithm in paral
     \item Total Time: $O(n^2)$\\
 \end{itemize}
 
-\subsection{Improved parallel version}
+\subsection{Source Parallel version}
 This version aim to exploit more the parallel execution of the GPU, using one Block per node of the graph, and one thread for every node to evaluate in the block.
 To reach this objective it is necessary to use the shared memory to save the varius data used during the computation of a block.\\
 
@@ -232,10 +232,11 @@ for (int i = 0; i < dimension; i++) {
 }
 \end{verbatim}
 
-\subsection{Basic parallel version}
+\subsection{Source Partitioned version}
 This simple parallel version is implemented by the function
 \begin{verbatim}
-__global__ void shortestPathsParallel(int* matrix, int dimension, int* results, int* lArray, bool* VtArray)
+__global__ void shortestPathsParallel(int* matrix, int dimension,
+    int* results, int* lArray, bool* VtArray)
 \end{verbatim}
 
 The algorithm is not substantially different from the sequential version, the only change present is that now the reference for the
@@ -247,7 +248,7 @@ the results copying section.
 This means that during initialization the Vt index to set is the one corresponding to the idx variable. This id is also used during the
 update of the l array and the filling of the results matrix.\\
 
-\subsection{Improved parallel version}
+\subsection{Source Parallel version}
 The last version is implemented by the function
 \begin{verbatim}
 __global__ void shortestPathsParallelV2(int* matrix, int* results)
@@ -289,7 +290,7 @@ At the end of the operation the result will lay in the first cell of the array.\
 This operation dows not require additional data structures to function, so it works competely in-place. The general field of application are mathematical operations such as sum or, in this case, a
 minimum operation.
 
-The standard algorithm of the reduction has been slighly modified to keep track of the node original index between the various passages. This comes with an additional
+The standard algorithm of the reduction has been slighly modified, as reported by this article \cite{wiki}, to keep track of the node original index between the various passages. This comes with an additional
 cost, because now the number of comparisons that a thread must perform for every cycle is two instead of one.
 
 
@@ -351,8 +352,8 @@ The performances in terms of execution time have been summarized into the follow
     \captionof{figure}{Parallel reduction scheme}
 \end{center}
 
-The chart shows that the basic parallel version has a slighlty less tilted curve than the sedquential one, but the gain is not
-that significant, while the improved parallel version shows an initial spike before the aother two starts to ascend. \\
+The chart shows that the Source Partitioned version has a slighlty less tilted curve than the sedquential one, but the gain is not
+that significant, while the Source Parallel version shows an initial spike before the aother two starts to ascend. \\
 
 This may be due to the overhead of the parallel execution, in an area where the number of nodes is not high enough to show its efficacy.
 \newpage
@@ -362,7 +363,7 @@ The resulting speedups are the shown below:
 \begin{center}
     \begin{tabular}{ |c|c|c| }
     \hline
-    \textbf{Number of nodes} & \textbf{Basic parallel version} & \textbf{Improved parallel version} \\ \hline
+    \textbf{Number of nodes} & \textbf{Source Partitioned version} & \textbf{Source Parallel version} \\ \hline
     256 & 0.58  & 0.48 \\ \hline
     512 & 1.26 & 0.36 \\ \hline
     1024 & 2.18 & 0.16 \\ \hline
@@ -371,12 +372,12 @@ The resulting speedups are the shown below:
     \end{tabular}
 \end{center}
 
-The improved parallel version speedups could not be evaluated for graphs larger than 2014 nodes due to the testing machine
+The Source Parallel version speedups could not be evaluated for graphs larger than 2014 nodes due to the testing machine
 limitations. It is worth noting thought that the performances of the latter are always worse than the sequential version, while the basic
 version outperforms the sequential starting from 512 nodes of dimensions. \\
 
-All the speedups of the basic parallel version are evaluated considering a number of processors equal to the number of nodes, while the speedups
-of the improved parallel version take into account $nodes * nodes$ processors.
+All the speedups of the Source Partitioned version are evaluated considering a number of processors equal to the number of nodes, while the speedups
+of the Source Parallel version take into account $nodes * nodes$ processors.
 
 \section{Conclusions}
 
@@ -386,7 +387,7 @@ due to excessive testing limitations of the benchmarking machine. \\
 The improved version performances are basically unknown at this point, because the testing could not work on graphs with a decent amount of nodes,
 where the full parallel version would has the possibility to be effective compared to the other two versions. \\
 
-The basic parallel version also does not show the expected speedup, while being faster than the sequential version the improvement shown does not bring the
+The Source Partitioned version also does not show the expected speedup, while being faster than the sequential version the improvement shown does not bring the
 time required to a smaller scale of reference, the elapsed time is smaller but in the same range of values. For this reason it is hard to tell if it would be worth using
 parallel processors with this algorithm on a real problem, considering the costs of this type of hardware, for a gain that is not that significant. \\
 

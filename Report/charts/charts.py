@@ -13,13 +13,13 @@ sequential = [0.0000066, 0.0000154, 0.0002866, 0.0004263, 0.0021679, 0.0146553, 
 basicParallel = [0.0005944, 0.0004786, 0.0010106, 0.0044829, 0.0160679, 0.0605466, 0.2003708, 0.7329258, 3.3799178, 27.1777647, 335.5577241] # Basic parallel version times
 improvedParallel = [0.0000879, 0.0002344, 0.0006153, 0.0016028, 0.0044910, 0.0285552, 0.2422871, 2.5845715, 45.2562854] # Improved parallel version times
 
-for x in range(9):
-  print(sequential[x] / improvedParallel[x])
+#for x in range(9):
+#  print(sequential[x] / improvedParallel[x])
 
 fig, ax = plt.subplots()
-ax.plot(x, sequential, label="Sequential")
-ax.plot(x, basicParallel, label="Basic parallel")
-ax.plot(x2, improvedParallel, label="Improved parallel")
+ax.plot(x, sequential, label="Sequential", marker='o')
+ax.plot(x, basicParallel, label="Source Partitioned", marker='o')
+ax.plot(x2, improvedParallel, label="Source Parallel", marker='o')
 ax.set_title("Executions times for every algorithm")
 ax.set_xlabel("Number of nodes")
 ax.set_ylabel("Time in seconds")
