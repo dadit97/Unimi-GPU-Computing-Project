@@ -10,6 +10,7 @@
 \usepackage{caption}
 \usepackage{soul}
 \usepackage{subcaption}
+\usepackage[export]{adjustbox}
 
 \addbibresource{bibliography.bib} % Bibliography file (located in the same folder as the template)
 \nocite{*} 
@@ -364,10 +365,9 @@ The performances in terms of execution time have been summarized into the follow
 The chart shows that the Source Partitioned version has a slighlty less tilted curve than the sequential one, but the gain is not
 that significant, while the Source Parallel version shows an initial spike before the other two starts to ascend. \\
 
-This may be due to the overhead of the parallel execution, in an area where the number of nodes is not high enough to show its efficacy.
-\newpage
+This may be due to the overhead of the parallel execution, in an area where the number of nodes is not high enough to show its efficacy. \\
 
-The resulting speedups are the shown below:
+The resulting speedups are shown below:
 
 \begin{center}
     \begin{tabular}{ |c|c|c| }
@@ -392,53 +392,67 @@ of the Source Parallel version take into account $nodes * nodes$ processors.
 
 Profiling has been accomplished using the NVIDIA \textbf{Nvprof} Profiler \cite{nvprof}, which is out of support nowadays, but the benchmarking machine uses a card which is not compatible
 with the more recent tool \textbf{Nsys}. \cite{nsys} \\
-The following data has been extracted, executing both algorithms on a graph composed of 512 nodes. \\
+The following data has been collected executing both algorithms on a graph composed of 512 nodes. \\
 
 The first table show the data obtained with the GPU Trace command, while the second is the general profiling of the compiled executable. \\
 
 \begin{center}
-    \begin{tabular}{ |c|c|c|c|c|c|c|c|c|c|c|c|c|c|c| }
-    \hline
-    \textbf{Start} & \textbf{Duration} & \textbf{Grid Size} & \textbf{Block Size} & \textbf{Regs*} & \textbf{SSMem*} & \textbf{DSMem*} & \textbf{Size} & \textbf{Throughput} & \textbf{SrcMemType} & \textbf{DstMemType} & \textbf{Device} & \textbf{Context} & \textbf{Stream} & \textbf{Name} \\ \hline
-    406.56ms & 81.856us & - & - & - & - & - & 1.0000MB & 11.930GB/s & Pageable & Device  NVIDIA GeForce & 1 & 7 & [CUDA memcpy HtoD] \\ \hline
-    1.30807s & 747.66ms & (1 1 1) & (1024 1 1) & 38 & 0B & 0B & - & - & - & - & NVIDIA GeForce & 1 & 7 & shortestPathsParallel(int*, int, int*, int*, bool*) [136] \\ \hline
-    2.05580s & 108.22us & - & - & - & - & - & 1.0000MB & 9.0235GB/s & Device & Pageable & NVIDIA GeForce & 1 & 7 & [CUDA memcpy DtoH] \\ \hline
-    2.05755s & 2.57792s & (512 1 1) & (512 1 1) & 40 & 0B & 6.5010KB & - & - & - & -  NVIDIA GeForce & 1 & 7 & shortestPathsParallelV2(int*, int*) [142] \\ \hline
-    4.63555s & 108.26us & - & - & - & - & - & 1.0000MB & 9.0209GB/s & Device & Pageable & NVIDIA GeForce & 1 & 7  [CUDA memcpy DtoH] \\ \hline
-    \end{tabular}
+    \begin{adjustbox}{width=1\textwidth}
+        \begin{tabular}{ |c|c|c|c|c|c| }
+        \hline
+        & \textbf{CUDA memcpy HtoD} & \textbf{shortestPathsParallel} & \textbf{CUDA memcpy DtoH} & \textbf{shortestPathsParallelV2} & \textbf{CUDA memcpy DtoH} \\ \hline
+        \textbf{Start} & 406.56ms & 1.30807s & 2.05580s & 2.05755s & 4.63555s       \\ \hline
+        \textbf{Duration} & 81.856us & 747.66ms & 108.22us & 2.57792s & 108.26us    \\ \hline
+        \textbf{Grid Size} & - & (1 1 1) & - & (512 1 1) & - \\ \hline
+        \textbf{Block Size} & - & (1024 1 1) & - & (512 1 1) & - \\ \hline
+        \textbf{Regs*} & - & 38 & - & 40 & - \\ \hline
+        \textbf{DSMem*} & - & 0B & - & 6.5010KB & -      \\ \hline
+        \textbf{Throughput} & 11.930GB/s & - & 9.0235GB/s & - & 9.0209GB/s     \\ \hline
+        \textbf{SrcMemType} & Pageable & - & Device & - & Device   \\ \hline
+        \textbf{DstMemType} & Device & - & Pageable & - & Pageable   \\ \hline
+        \textbf{Context} & 1 & 1 & 1 & 1 & 1    \\ \hline
+        \textbf{Stream} & 7 & 7 & 7 & 7 & 7       \\ \hline
+        \end{tabular}
+    \end{adjustbox}
+    \captionof{table}{General profiling of the program} 
 \end{center}
 
 \begin{center}
-    \begin{tabular}{ |c|c|c|c|c|c|c|c| }
-        \textbf{Type}   & \textbf{Time(\%)}  & \textbf{Time}  & \textbf{Calls} & \textbf{Avg}  & \textbf{Min} & \textbf{Max}  & \textbf{Name}       \\ \hline
-    GPU activities  & 77.51     & 2.57922s  &   1   &   2.57922s    &  2.57922s  &  2.57922s &  shortestPathsParallelV2(int*, int*)                 \\ \hline
-    GPU activities  & 22.48     & 747.92ms  &   1   &   747.92ms    &  747.92ms  &  747.92ms &  shortestPathsParallel(int*, int, int*, int*, bool*) \\ \hline
-    GPU activities  & 0.01      & 219.26us  &   2   &   109.63us    &  108.38us  &  110.88us &  CUDA memcpy DtoH                                    \\ \hline
-    GPU activities  & 0.00      & 83.199us  &   1   &   83.199us    &  83.199us  &  83.199us &  CUDA memcpy HtoD                                    \\ \hline
-    API calls       & 97.75     & 3.32723s  &   2   &   1.66361s    &  747.99ms  &  2.57924s &  cudaDeviceSynchronize                               \\ \hline
-    API calls       & 1.70      & 57.931ms  &   1   &   57.931ms    &  57.931ms  &  57.931ms &  cudaSetDevice                                       \\ \hline
-    API calls       & 0.47      & 15.937ms  &   1   &   15.937ms    &  15.937ms  &  15.937ms &  cuDevicePrimaryCtxRelease                           \\ \hline
-    API calls       & 0.03      & 1.0034ms  &   3   &   334.47us    &   158.50us &  446.90us &  cuLibraryLoadData                                   \\ \hline
-    API calls       & 0.02      & 665.20us  &   3   &   221.73us    &  171.60us  &  249.80us &  cudaMemcpy                                          \\ \hline
-    API calls       & 0.01      & 440.80us  &   4   &   110.200us   &  10.300us  &  245.80us &  cudaMalloc                                          \\ \hline
-    API calls       & 0.01      & 420.60us  &   4   &   105.15us    &  11.300us  &  215.50us &  cudaFree                                            \\ \hline
-    API calls       & 0.00      & 141.00us  &   2   &   70.500us    &  49.600us  &  91.400us &  cudaLaunchKernel                                    \\ \hline
-    API calls       & 0.00      & 64.100us  &   3   &   21.366us    &  5.2000us  &  34.200us &  cuLibraryUnload                                     \\ \hline
-    API calls       & 0.00      & 22.400us  &   114 &   196ns       &  100ns     &  2.2000us &  cuDeviceGetAttribute                                \\ \hline
-    API calls       & 0.00      & 6.7000us  &   3   &   2.2330us    &  200ns     &  6.0000us &  cuDeviceGetCount                                    \\ \hline
-    API calls       & 0.00      & 2.6000us  &   1   &   2.6000us    &  2.6000us  &  2.6000us &  cudaGetDeviceProperties                             \\ \hline
-    API calls       & 0.00      & 2.4000us  &   1   &   2.4000us    &  2.4000us  &  2.4000us &  cuModuleGetLoadingMode                              \\ \hline
-    API calls       & 0.00      & 2.3000us  &   1   &   2.3000us    &  2.3000us  &  2.3000us &  cudaGetDevice                                       \\ \hline
-    API calls       & 0.00      & 2.0000us  &   2   &   1.0000us    &  200ns     &  1.8000us &  cuDeviceGet                                         \\ \hline
-    API calls       & 0.00      & 1.0000us  &   2   &   500ns       &  400ns     &  600ns    &  cudaGetLastError                                    \\ \hline
-    API calls       & 0.00      & 900ns     &   1   &   900ns       &  900ns     &  900ns    &  cuDeviceGetName                                     \\ \hline
-    API calls       & 0.00      & 300ns     &   1   &   300ns       &  300ns     &  300ns    &  cuDeviceTotalMem                                    \\ \hline
-    API calls       & 0.00      & 300ns     &   1   &   300ns       &  300ns     &  300ns    &  cuDeviceGetLuid                                     \\ \hline
-    API calls       & 0.00      & 300ns     &   1   &   300ns       &  300ns     &  300ns    &  cudaPeekAtLastError                                 \\ \hline
-    API calls       & 0.00      & 200ns     &   1   &   200ns       &  200ns     &  200ns    &  cuDeviceGetUuid                                       
-    \end{tabular}
+    \begin{adjustbox}{width=1\textwidth}
+        \begin{tabular}{ |c|c|c|c|c|c|c| }
+            \hline
+            \textbf{Time(\%)}  & \textbf{Time}  & \textbf{Calls} & \textbf{Avg}  & \textbf{Min} & \textbf{Max}  & \textbf{Name}       \\ \hline
+            77.51     & 2.57922s  &   1   &   2.57922s    &  2.57922s  &  2.57922s &  shortestPathsParallelV2                             \\ \hline
+            22.48     & 747.92ms  &   1   &   747.92ms    &  747.92ms  &  747.92ms &  shortestPathsParallelV2                             \\ \hline
+            0.01      & 219.26us  &   2   &   109.63us    &  108.38us  &  110.88us &  CUDA memcpy DtoH                                    \\ \hline
+            0.00      & 83.199us  &   1   &   83.199us    &  83.199us  &  83.199us &  CUDA memcpy HtoD                                    \\ \hline
+            97.75     & 3.32723s  &   2   &   1.66361s    &  747.99ms  &  2.57924s &  cudaDeviceSynchronize                               \\ \hline
+            1.70      & 57.931ms  &   1   &   57.931ms    &  57.931ms  &  57.931ms &  cudaSetDevice                                       \\ \hline
+            0.47      & 15.937ms  &   1   &   15.937ms    &  15.937ms  &  15.937ms &  cuDevicePrimaryCtxRelease                           \\ \hline
+            0.03      & 1.0034ms  &   3   &   334.47us    &   158.50us &  446.90us &  cuLibraryLoadData                                   \\ \hline
+            0.02      & 665.20us  &   3   &   221.73us    &  171.60us  &  249.80us &  cudaMemcpy                                          \\ \hline
+            0.01      & 440.80us  &   4   &   110.200us   &  10.300us  &  245.80us &  cudaMalloc                                          \\ \hline
+            0.01      & 420.60us  &   4   &   105.15us    &  11.300us  &  215.50us &  cudaFree                                            \\ \hline
+            0.00      & 141.00us  &   2   &   70.500us    &  49.600us  &  91.400us &  cudaLaunchKernel                                    \\ \hline
+            0.00      & 64.100us  &   3   &   21.366us    &  5.2000us  &  34.200us &  cuLibraryUnload                                     \\ \hline
+            0.00      & 22.400us  &   114 &   196ns       &  100ns     &  2.2000us &  cuDeviceGetAttribute                                \\ \hline
+            0.00      & 6.7000us  &   3   &   2.2330us    &  200ns     &  6.0000us &  cuDeviceGetCount                                    \\ \hline
+            0.00      & 2.6000us  &   1   &   2.6000us    &  2.6000us  &  2.6000us &  cudaGetDeviceProperties                             \\ \hline
+            0.00      & 2.4000us  &   1   &   2.4000us    &  2.4000us  &  2.4000us &  cuModuleGetLoadingMode                              \\ \hline
+            0.00      & 2.3000us  &   1   &   2.3000us    &  2.3000us  &  2.3000us &  cudaGetDevice                                       \\ \hline
+            0.00      & 2.0000us  &   2   &   1.0000us    &  200ns     &  1.8000us &  cuDeviceGet                                         \\ \hline
+            0.00      & 1.0000us  &   2   &   500ns       &  400ns     &  600ns    &  cudaGetLastError                                    \\ \hline
+            0.00      & 900ns     &   1   &   900ns       &  900ns     &  900ns    &  cuDeviceGetName                                     \\ \hline
+            0.00      & 300ns     &   1   &   300ns       &  300ns     &  300ns    &  cuDeviceTotalMem                                    \\ \hline
+            0.00      & 300ns     &   1   &   300ns       &  300ns     &  300ns    &  cuDeviceGetLuid                                     \\ \hline
+            0.00      & 300ns     &   1   &   300ns       &  300ns     &  300ns    &  cudaPeekAtLastError                                 \\ \hline
+            0.00      & 200ns     &   1   &   200ns       &  200ns     &  200ns    &  cuDeviceGetUuid                                     \\ \hline  
+        \end{tabular}
+    \end{adjustbox}
+    \captionof{table}{GPU Trace report} 
 \end{center}
 
+\newpage
 \section{Conclusions}
 
 This paper discussed about two parallel implementations of the Dijkstra's Algorithm, unfortunately the results cannot be cosidered conclusive in any way,
@@ -451,7 +465,6 @@ The Source Partitioned version also does not show the expected speedup, while be
 time required to a smaller scale of reference, the elapsed time is smaller but in the same range of values. For this reason it is hard to tell if it would be worth using
 parallel processors with this algorithm on a real problem, considering the costs of this type of hardware, for a gain that is not that significant. \\
 
-\newpage
 \printbibliography % Output the bibliography
 
 %----------------------------------------------------------------------------------------
