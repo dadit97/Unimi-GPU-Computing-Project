@@ -340,6 +340,10 @@ The tests have been performed on a machine equipped with a GPU NVidia GeForce GT
 the GPU architecture possesses these basic specifications:\\
 
 \begin{itemize}
+    \item   Compute Capability: 6.1 
+    \item   Total CUDA Cores: 640
+    \item   Clock: 1354 MHz
+    \item   Memory: 4096 MB GDDR5
     \item   Max Threads per Block: 1024
     \item   Max Blocks per Multiprocessor: 32
     \item   Max Shared Memory size per Block: 49152 bytes\\
@@ -378,6 +382,20 @@ partitioned version outperforms the sequential starting from 512 nodes of dimens
 
 All the speedups of the Source Partitioned version are evaluated considering a number of processors equal to the number of nodes, while the speedups
 of the Source Parallel version take into account $nodes * nodes$ processors.
+
+Using NVidia Visual Profiler, the following data has been extracted for a more complex analysis, executing both algorithms for a graph composed of 512 nodes.
+
+\begin{center}
+    \begin{tabular}{ |c|c|c| }
+    \hline
+    \textbf{Statistic} & \textbf{Source Partitioned version} & \textbf{Source Parallel version} \\ \hline
+    Warp execution efficiency & 89.9\%  & 0.48 \\ \hline
+    Shared Memory Load Throughput & 0 B/s & 0.36 \\ \hline
+    Shared Memory Store Throughput & 0 B/s & 0.16 \\ \hline
+    Theoretical Occupancy & 50\% & NA \\ \hline
+    Obtained Occupancy & 24\% & NA \\ \hline
+    \end{tabular}
+\end{center}
 
 \section{Conclusions}
 
