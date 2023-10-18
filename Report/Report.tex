@@ -56,7 +56,7 @@
 
 \section{Introduction}
 
-The problem of shortest path in a graph consists in finding the path, from node A to node B,
+The problem of shortest path in a graph consists of finding the path, from node A to node B,
 which minimizes the sum of edges weights of which the path is composed.\\
 
 \begin{center}
@@ -65,7 +65,7 @@ which minimizes the sum of edges weights of which the path is composed.\\
 \end{center}
 
 In particular, the algorithm used for this document aim to solve the all-pairs shortest path problem,
-which consists of finding the lenght of the shortest path for all the pairs of nodes.\\
+which consists of finding the lenght of the shortest path for every pair of nodes.\\
 
 The algorithm assumes that there are not negative weights and that the graph is undirected without isolated parts.\\
 
@@ -177,7 +177,7 @@ by n processors, but we have to take into account the communication delay:\\
 
 The codebase is a C++ application written using the Visual Studio IDE from Microsoft, supported by the Nsight tools from NVIDIA. \cite{nsight}
 
-These tools enable some utilities like a debugger and the integration with the IDE, enabling some shortcuts via hte Visual Studio UI. \\
+These tools enable some utilities like a debugger and the integration with the IDE, enabling some shortcuts via the Visual Studio UI. \\
 
 \subsection{Sequential version}
 The sequential version is implemented by the function
