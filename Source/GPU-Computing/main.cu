@@ -22,7 +22,7 @@ int main(void) {
     printf("Max Blocks per Multiprocessor:%d\n", props.maxBlocksPerMultiProcessor);
     printf("Max Shared Memory size per Block:%d bytes\n", props.sharedMemPerBlock);
 
-    int nodes = 512;
+    int nodes = 1024;
     int* matrix = (int*)malloc(nodes * nodes * sizeof(int*));
     for (int i = 0; i < nodes; i++) {
         matrix[i] = 999;
@@ -34,13 +34,6 @@ int main(void) {
     printf("Shared Memory size used per Block:%d bytes\n", sizeof(int) * nodes + sizeof(int) * nodes * 2 + sizeof(bool) * nodes + sizeof(bool));
     generateRandomGraph(matrix, nodes);
     printf("Random graph of %d nodes initialized\n", nodes);
-
-    /*for (int i = 0; i < nodes; i++) {
-        for (int j = 0; j < nodes; j++) {
-            printf("%d", matrix[i * nodes + j]);
-        }
-        printf("\n");
-    }*/
 
     int* gpu_matrix;
     cudaError_t cudaError = cudaMalloc(&gpu_matrix, nodes * nodes * sizeof(int));
@@ -103,13 +96,6 @@ int main(void) {
     ms duration = clock::now() - before;
 
     printf("Sequential execution time: %f milliseconds\n", duration.count());
-
-    /*for (int i = 0; i < nodes; i++) {
-        for (int j = 0; j < nodes; j++) {
-            printf("%d", results[i * nodes + j]);
-        }
-        printf("\n");
-    }*/
     
     //KERNEL V1 PART
 
@@ -140,13 +126,6 @@ int main(void) {
         printf("Error during results copy on Host: %s\n", cudaGetErrorString(cudaError));
     }
     printf("Results copy on Host completed\n");
-
-    /*for (int i = 0; i < nodes; i++) {
-        for (int j = 0; j < nodes; j++) {
-            printf("%d", results[i * nodes + j]);
-        }
-        printf("\n");
-    }*/
 
     for (int i = 0; i < nodes * nodes; i++) {
         resultsV1[i] = results[i];
@@ -195,31 +174,10 @@ int main(void) {
         }
         printf("Results copy on Host completed\n");
 
-        /*for (int i = 0; i < nodes; i++) {
-            for (int j = 0; j < nodes; j++) {
-                printf("%d", results[i * nodes + j]);
-            }
-            printf("\n");
-        }*/
-
         for (int i = 0; i < nodes * nodes; i++) {
             resultsV2[i] = results[i];
         }
 
-        /*for (int i = 0; i < nodes; i++) {
-            for (int j = 0; j < nodes; j++) {
-                printf("%d", resultsV1[i * nodes + j]);
-            }
-            printf("\n");
-        }
-        printf("\n");
-        for (int i = 0; i < nodes; i++) {
-            for (int j = 0; j < nodes; j++) {
-                printf("%d", resultsV2[i * nodes + j]);
-            }
-            printf("\n");
-        }
-        printf("\n");*/
         printf("Kernel V2 execution time: %f milliseconds\n", duration.count());
     }
 
