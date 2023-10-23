@@ -168,8 +168,8 @@ The improved version increases the concurrency by using $n$ processor per instan
 by n processors, but we have to take into account the communication delay:\\
 \begin{itemize}
     \item Time per Source: $O(n^2/p + nlog(p))$
-    \item Number of processors: $n$
-    \item Total Time: $O(n^3 / n) + O(nlog(p)) = O(n^2) + O(nlog(p))$\\
+    \item Number of processors: $n^2$
+    \item Total Time: $O(n^3 / n^2) + O(nlog(p)) = O(n) + O(nlog(p))$\\
 \end{itemize}
 
 \newpage
